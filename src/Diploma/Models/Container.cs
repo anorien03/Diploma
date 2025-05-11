@@ -18,6 +18,12 @@ namespace Diploma.Models
             Width = width;
             Height = height;
             Weight = weight;
+        } 
+
+
+        public Container rotate()
+        {
+            return new Container(Id, Width, Length, Height, Weight);
         }
     }
 }
