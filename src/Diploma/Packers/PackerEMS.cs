@@ -51,7 +51,6 @@ namespace Diploma.Packers
 
                 if (totalWeight + container.Weight > shipHold.LiftCapacity)
                 {
-                    Console.WriteLine($"oops, doesn't fit weight. Box {container.Id}");
                     unpackedWeightContainersId.Add(container.Id);
                     continue;
                 }
@@ -68,7 +67,6 @@ namespace Diploma.Packers
 
                 if (packedContainer == null)
                 {
-                    Console.WriteLine($"oops, doesn't fit space. Box {container.Id}");
                     unpackedSpaceContainersId.Add(container.Id);
                     continue;
                 }

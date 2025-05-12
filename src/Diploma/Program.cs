@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Diploma;
 using Diploma.Models;
 using Diploma.Packers;
 
@@ -158,7 +159,34 @@ List<int> chr = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
 
 
 var packer = new PackerEMS();
-var res = packer.PackContainers(sh, c, chr);
+//var res = packer.PackContainers(sh, c, chr);
+//var coor = res.PackedContainers;
+
+////Console.WriteLine(weight);
+//foreach (var a in coor) { Console.WriteLine($"({a.Container.Id})),"); }
+//foreach (var a in coor) { Console.WriteLine($"(({a.X0}, {a.Y0}, {a.Z0}), ({a.X1 - a.X0}, {a.Y1 - a.Y0}, {a.Z1 - a.Z0})),"); }
+
+//foreach (var a in res.UnpackedWeightContainersId) { Console.WriteLine($"wei ({a})),"); }
+//foreach (var a in res.UnpackedSpaceContainersId) { Console.WriteLine($"sp ({a})),"); }
+
+//Console.WriteLine(res.TotalVolume);
+//Console.WriteLine(res.TotalWeight);
+
+//for (int i = 0; i < coor.Count; i++)
+//{
+//    for (int j = i + 1; j < coor.Count; j++)
+//    {
+//        if ((coor[i].X0 >= coor[j].X1 | coor[i].X1 <= coor[j].X0 | coor[i].Y0 >= coor[j].Y1 | coor[i].Y1 <= coor[j].Y0 | coor[i].Z0 >= coor[j].Z1 | coor[i].Z1 <= coor[j].Z0) == false)
+//        {
+//            Console.WriteLine($"oops overlaps {coor[i].Container.Id}, {coor[j].Container.Id}");
+//        }
+//    }
+//}
+
+
+var genetic = new GeneticAlgorithm(packer, 30, 30, 30, 2, 10);
+var res = genetic.Run(sh, c);
+
 var coor = res.PackedContainers;
 
 //Console.WriteLine(weight);
@@ -181,5 +209,3 @@ for (int i = 0; i < coor.Count; i++)
         }
     }
 }
-
-

@@ -32,6 +32,110 @@ namespace Diploma
 		}
 
 
+
+        public PackerResult Run(ShipHold shipHold, List<Container> containers)
+        {
+            _shipHold = shipHold;
+            _containers = containers;
+
+            var population = GeneratePopulation();
+
+            for (int g = 0; g < GenerationsCount; g++)
+            {
+                SortByFitness(population);
+                Console.WriteLine($"get {g}: fitness = {population[0].Fitness}");
+
+                List<Individual> elites;
+                List<Individual> selected;
+                Partition(population, out elites, out selected);
+
+                
+                var offspring = new List<Individual>();
+                Individual child1;
+                Individual child2;
+
+                for (int i = 0; i < selected.Count - 1; i += 2)
+                {
+                    OrderedCrossover(selected[i], selected[i + 1], out child1, out child2);
+                    offspring.Add(child1);
+                    offspring.Add(child2);
+                }
+
+                if (selected.Count %2 == 1) { offspring.Add(selected[selected.Count - 1]); }
+
+                population = elites;
+                population.AddRange(offspring);
+
+                Mutation(population);
+            }
+
+            SortByFitness(population);
+            Console.WriteLine($"end: fitness = {population[0].Fitness}");
+
+            return PackContainers(population[0]);
+
+            //foreach (var a in population) { Console.WriteLine($"{a.Chromosome[0]} {a.Chromosome[1]} {a.Chromosome[2]} {a.Fitness}"); }
+
+            //var elites = new List<Individual>();
+            //var selected = new List<Individual>();
+            //Partition(population, out elites, out selected);
+
+            //Console.WriteLine("elites");
+            //foreach (var a in elites) { Console.WriteLine($"{a.Chromosome[0]} {a.Chromosome[1]} {a.Chromosome[2]} {a.Fitness}"); }
+            //Console.WriteLine("selected");
+            //foreach (var a in selected) { Console.WriteLine($"{a.Chromosome[0]} {a.Chromosome[1]} {a.Chromosome[2]} {a.Fitness}"); }
+
+            //Individual child1;
+            //Individual child2;
+            //Console.WriteLine();
+            //Console.WriteLine();
+            //Mutation(population);
+            //Console.WriteLine();
+            //foreach (var a in population[0].Chromosome) { Console.Write($"{a} "); }
+            //Console.WriteLine();
+            //foreach (var a in population[1].Chromosome) { Console.Write($"{a} "); }
+            //Console.WriteLine();
+            //foreach (var a in population[2].Chromosome) { Console.Write($"{a} "); }
+            //Console.WriteLine();
+            //foreach (var a in population[3].Chromosome) { Console.Write($"{a} "); }
+            //Console.WriteLine();
+            //foreach (var a in population[4].Chromosome) { Console.Write($"{a} "); }
+            //Console.WriteLine();
+            //foreach (var a in population[5].Chromosome) { Console.Write($"{a} "); }
+            //Console.WriteLine();
+            //foreach (var a in population[6].Chromosome) { Console.Write($"{a} "); }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private List<Individual> GeneratePopulation()
+        {
+            var population = new List<Individual>();
+            var containersId = _containers.Select(c => c.Id).ToList();
+
+            for (int i = 0; i < PopulationSize; i++)
+            {
+                var random = new Random();
+
+                var chromosome = containersId.OrderBy(x => random.Next()).ToList();
+                population.Add(new Individual(chromosome));
+            }
+
+            return population;
+        }
+
+
 		private PackerResult PackContainers(Individual individual)
 		{
 			return _packer.PackContainers(_shipHold, _containers, individual.Chromosome);
@@ -62,22 +166,23 @@ namespace Diploma
         }
 
 
-        private void OrderedCrossover(List<int> parent1, List<int> parent2, out List<int> child1, out List<int> child2)
+        private void OrderedCrossover(Individual parent1, Individual parent2, out Individual child1, out Individual child2)
         {
-            int size = parent1.Count;
+            int size = parent1.Chromosome.Count;
 
             var random = new Random();
             int a = random.Next(size);
             int b = random.Next(size);
             if (a > b) (a, b) = (b, a);
+            
 
-            child1 = Enumerable.Repeat(-1, size).ToList();
-            child2 = Enumerable.Repeat(-1, size).ToList();
+            var chr1 = Enumerable.Repeat(-1, size).ToList();
+            var chr2 = Enumerable.Repeat(-1, size).ToList();
 
             for (int i = a; i < b; i++)
             {
-                child1[i] = parent1[i];
-                child2[i] = parent2[i];
+                chr1[i] = parent1.Chromosome[i];
+                chr2[i] = parent2.Chromosome[i];
             }
 
             int index = 0;
@@ -85,9 +190,9 @@ namespace Diploma
             {
                 if (i < a | i >= b)
                 {
-                    while (index < size && child1.Contains(parent2[index]))
+                    while (index < size && chr1.Contains(parent2.Chromosome[index]))
                         index++;
-                    child1[i] = parent2[index++];
+                    chr1[i] = parent2.Chromosome[index++];
                 }
             }
 
@@ -96,17 +201,30 @@ namespace Diploma
             {
                 if (i < a || i >= b)
                 {
-                    while (index < size && child2.Contains(parent1[index]))
+                    while (index < size && chr2.Contains(parent1.Chromosome[index]))
                         index++;
-                    child2[i] = parent1[index++];
+                    chr2[i] = parent1.Chromosome[index++];
                 }
             }
+
+            child1 = new Individual(chr1);
+            child2 = new Individual(chr2);
         }
 
 
         private void Mutation(List<Individual> population)
         {
-
+            var size = _containers.Count;
+            var random = new Random();
+            for (int i = Elitism * PopulationSize / 100; i < PopulationSize; i++)
+            {
+                if (random.Next(100) < MutationRate)
+                {
+                    int a = random.Next(size);
+                    int b = random.Next(size);
+                    (population[i].Chromosome[a], population[i].Chromosome[b]) = (population[i].Chromosome[b], population[i].Chromosome[a]);
+                }
+            }
         }
 
 
