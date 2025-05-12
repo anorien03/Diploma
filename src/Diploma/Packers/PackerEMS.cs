@@ -35,7 +35,7 @@ namespace Diploma.Packers
 
 
 
-        public PackerResult PackContainers(ShipHold shipHold, List<Container> containers, List<int> chromosome)
+        public PackerResult PackContainers(ShipHold shipHold, List<Container> containers, List<int> order)
 		{
 			List<PackedContainer> coordinates = new List<PackedContainer>();
             var unpackedWeightContainersId = new List<int>();
@@ -45,9 +45,9 @@ namespace Diploma.Packers
             int totalWeight = 0;
             int totalVolume = 0;
 
-            foreach (var gene in chromosome)
+            foreach (var id in order)
             {
-                var container = containers.First(c => c.Id == gene);
+                var container = containers.First(c => c.Id == id);
 
                 if (totalWeight + container.Weight > shipHold.LiftCapacity)
                 {

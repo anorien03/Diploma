@@ -5,7 +5,7 @@ namespace Diploma.Packers
 {
 	public interface IPacker
 	{
-        PackerResult PackContainers(ShipHold shipHold, List<Container> containers, List<int> chromosome);
+        PackerResult PackContainers(ShipHold shipHold, List<Container> containers, List<int> order);
 
     }
 }

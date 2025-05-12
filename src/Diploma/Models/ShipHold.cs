@@ -7,6 +7,7 @@ namespace Diploma.Models
         public int Width { get; }
         public int Height { get; }
         public int LiftCapacity { get; }
+        public int Volume => Length * Width * Height;
 
 
         public ShipHold(int length, int width, int height, int liftCapacity)
