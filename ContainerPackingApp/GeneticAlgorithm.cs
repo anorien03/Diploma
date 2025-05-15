@@ -1,35 +1,36 @@
 ﻿using System;
-using System.Drawing;
-using System.Text;
-using Diploma.Models;
-using Diploma.Packers;
+using ContainerPackingApp.Models.Diploma.Models;
+using ContainerPackingApp.Packers;
+using System.Collections.Generic;
+using System.Linq;
+using ContainerPackingApp.Models;
 
-namespace Diploma
+namespace ContainerPackingApp
 {
-	public class GeneticAlgorithm
-	{
-		private IPacker _packer { get; }
-		private ShipHold _shipHold { get; set; }
-		private List<Container> _containers { get; set; }
+    public class GeneticAlgorithm
+    {
+        private IPacker _packer { get; }
+        private ShipHold _shipHold { get; set; }
+        private List<Container> _containers { get; set; }
 
-		public int PopulationSize { get; set; }
-		public int GenerationsCount { get; set; }
-		public int MutationRate { get; set; }
-		public int TournamentSize { get; set; }
-		public int Elitism { get; set; }
+        public int PopulationSize { get; set; }
+        public int GenerationsCount { get; set; }
+        public int MutationRate { get; set; }
+        public int TournamentSize { get; set; }
+        public int Elitism { get; set; }
 
-		public GeneticAlgorithm(IPacker packer, int populationSize, int generationsCount, int mutationRate, int tournamentSize, int elitism)
-		{
-			_packer = packer;
-			PopulationSize = populationSize;
-			GenerationsCount = generationsCount;
-			MutationRate = mutationRate;
-			TournamentSize = tournamentSize;
-			Elitism = elitism;
+        public GeneticAlgorithm(IPacker packer, int populationSize, int generationsCount, int mutationRate, int tournamentSize, int elitism)
+        {
+            _packer = packer;
+            PopulationSize = populationSize;
+            GenerationsCount = generationsCount;
+            MutationRate = mutationRate;
+            TournamentSize = tournamentSize;
+            Elitism = elitism;
 
-			_shipHold = new ShipHold(0, 0, 0, 0);
-			_containers = new List<Container>();
-		}
+            _shipHold = new ShipHold(0, 0, 0, 0);
+            _containers = new List<Container>();
+        }
 
 
 
@@ -49,7 +50,7 @@ namespace Diploma
                 List<Individual> selected;
                 Partition(population, out elites, out selected);
 
-                
+
                 var offspring = new List<Individual>();
                 Individual child1;
                 Individual child2;
@@ -61,7 +62,7 @@ namespace Diploma
                     offspring.Add(child2);
                 }
 
-                if (selected.Count %2 == 1) { offspring.Add(selected[selected.Count - 1]); }
+                if (selected.Count % 2 == 1) { offspring.Add(selected[selected.Count - 1]); }
 
                 population = elites;
                 population.AddRange(offspring);
@@ -165,10 +166,10 @@ namespace Diploma
         }
 
 
-		private PackerResult PackContainers(Individual individual)
-		{
-			return _packer.PackContainers(_shipHold, _containers, individual.Chromosome);
-		}
+        private PackerResult PackContainers(Individual individual)
+        {
+            return _packer.PackContainers(_shipHold, _containers, individual.Chromosome);
+        }
 
 
         private void SortByFitness(List<Individual> population)
@@ -203,7 +204,7 @@ namespace Diploma
             int a = random.Next(size);
             int b = random.Next(size);
             if (a > b) (a, b) = (b, a);
-            
+
 
             var chr1 = Enumerable.Repeat(-1, size).ToList();
             var chr2 = Enumerable.Repeat(-1, size).ToList();
@@ -255,9 +256,6 @@ namespace Diploma
                 }
             }
         }
-
-
-
 
     }
 }
