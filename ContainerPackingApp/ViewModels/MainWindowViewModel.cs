@@ -13,7 +13,11 @@ using ReactiveUI.Validation.Helpers;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
 using ReactiveUI.Validation.Extensions;
-
+using System.IO;
+using System.Globalization;
+using System.Windows;
+using System.Collections.Generic;
+using Avalonia.Controls;
 
 namespace ContainerPackingApp.ViewModels
 {
@@ -414,5 +418,64 @@ namespace ContainerPackingApp.ViewModels
                 IsRunning = false;
             }
         }
+
+
+
+
+        public async void LoadContainersFromCsv()
+        {
+            try
+            {
+                var dialog = new OpenFileDialog();
+                dialog.Filters.Add(new FileDialogFilter() { Name = "CSV Files", Extensions = { "csv" } });
+                dialog.AllowMultiple = false;
+
+                var result = await dialog.ShowAsync((Window)VisualRoot);
+                if (result != null && result.Any())
+                {
+                    var filePath = result.First();
+                    var containers = ParseCsvFile(filePath);
+
+                    Containers.Clear();
+                    foreach (var container in containers)
+                    {
+                        Containers.Add(container);
+                    }
+
+                    ResultText = $"Успешно загружено {containers.Count} контейнеров";
+                }
+            }
+            catch (Exception ex)
+            {
+                ResultText = $"Ошибка при загрузке файла: {ex.Message}";
+            }
+        }
+
+        private List<ContainerViewModel> ParseCsvFile(string filePath)
+        {
+            var containers = new List<ContainerViewModel>();
+            var lines = File.ReadAllLines(filePath);
+
+            foreach (var line in lines.Skip(1)) // Пропускаем заголовок
+            {
+                var parts = line.Split(',');
+                if (parts.Length >= 5)
+                {
+                    containers.Add(new ContainerViewModel
+                    {
+                        Id = int.Parse(parts[0].Trim()),
+                        Length = int.Parse(parts[1].Trim()),
+                        Width = int.Parse(parts[2].Trim()),
+                        Height = int.Parse(parts[3].Trim()),
+                        Weight = int.Parse(parts[4].Trim())
+                    });
+                }
+            }
+
+            return containers;
+        }
+
+        // Добавьте это свойство для доступа к корневому окну
+        public Avalonia.Controls.Window VisualRoot { get; set; }
     }
 }

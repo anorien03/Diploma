@@ -10,6 +10,8 @@ namespace ContainerPackingApp.ViewModels
         private int _height;
         private int _weight;
 
+
+
         public int Id
         {
             get => _id;
