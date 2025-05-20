@@ -3,94 +3,83 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:ContainerPackingApp.ViewModels"
+        xmlns:converters="using:Avalonia.Data.Converters"
+        Width="1400"
+        Height="800"
         mc:Ignorable="d" 
         d:DesignWidth="800" 
         d:DesignHeight="600"
         x:Class="ContainerPackingApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Container Packing Genetic Algorithm">
+        Title="Упаковка контейнеров в трюм с использованием генетического алгоритма">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <ScrollViewer>
-        <StackPanel Margin="20" Spacing="10">
-            <TextBlock Text="Genetic Algorithm Parameters" FontSize="16" FontWeight="Bold"/>
-            
-            <Grid ColumnDefinitions="200,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="5">
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Population Size:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PopulationSize}"/>
+
+
+    <ScrollViewer Background="#1c1c1c">
+        <StackPanel Margin="40, 20" Spacing="10">
+            <TextBlock Text="Параметры генетического алгоритма" FontSize="20" FontWeight="Bold"/>
+
+            <Grid ColumnDefinitions="200,*, *, 260, *" RowDefinitions="Auto,Auto,Auto,Auto,Auto, Auto" RowSpacing="6">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Размер популяции:" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PopulationSizeInput}"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding PopulationSizeError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Количество поколений:" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding GenerationsCountInput}"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding GenerationsCountError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
                 
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Generations Count:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GenerationsCount}"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Процент мутации (%):" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding MutationRateInput}"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding MutationRateError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
                 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Mutation Rate (%):" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MutationRate}"/>
+                <TextBlock Grid.Row="0" Grid.Column="3" Text="Количество особей в турнире:" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding TournamentSizeInput}"/>
+                <TextBlock Grid.Row="1" Grid.Column="4" Text="{Binding TournamentSizeError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
                 
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Tournament Size:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TournamentSize}"/>
-                
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Elitism (%):" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Elitism}"/>
+                <TextBlock Grid.Row="2" Grid.Column="3" Text="Процент элитизма (%):" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding ElitismInput}"/>
+                <TextBlock Grid.Row="3" Grid.Column="4" Text="{Binding ElitismError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
             </Grid>
             
             <Separator Margin="0,10"/>
             
-            <TextBlock Text="Ship Hold Parameters" FontSize="16" FontWeight="Bold"/>
+            <TextBlock Text="Параметры трюма" FontSize="20" FontWeight="Bold"/>
             
-            <Grid ColumnDefinitions="200,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="5">
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Length:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ShipHoldLength}"/>
+            <Grid ColumnDefinitions="200,*, *, 260, *" RowDefinitions="Auto,Auto,Auto,Auto, Auto" RowSpacing="6">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Длина (дм):" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ShipHoldLengthInput}"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ShipHoldLengthError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
                 
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Width:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ShipHoldWidth}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Ширина (дм):" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ShipHoldWidthInput}"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ShipHoldWidthError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
                 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Height:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ShipHoldHeight}"/>
+                <TextBlock Grid.Row="0" Grid.Column="3" Text="Высота (дм):" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding ShipHoldHeightInput}"/>
+                <TextBlock Grid.Row="1" Grid.Column="4" Text="{Binding ShipHoldHeightError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
                 
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Max Weight:" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ShipHoldMaxWeight}"/>
+                <TextBlock Grid.Row="2" Grid.Column="3" Text="Грузоподъемность (т):" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding ShipHoldMaxWeightInput}"/>
+                <TextBlock Grid.Row="3" Grid.Column="4" Text="{Binding ShipHoldMaxWeightError}" 
+                           Foreground="Red" FontSize="13" Margin="0,-5,0,0"/>
             </Grid>
             
-            <Separator Margin="0,10"/>
-            
-            <StackPanel>
-                <TextBlock Text="Containers" FontSize="16" FontWeight="Bold"/>
-                <Button Content="Add Container" Command="{Binding AddContainer}" Margin="0,5"/>
-                
-                <ItemsControl ItemsSource="{Binding Containers}" Margin="0,10">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="vm:ContainerViewModel">
-                            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,5">
-                                <Grid ColumnDefinitions="*,*,*,*,*,Auto" RowSpacing="5">
-                                    <TextBlock Grid.Column="0" Text="ID:" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding Id}" Width="60"/>
-                                    
-                                    <TextBlock Grid.Column="2" Text="Length:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                    <TextBox Grid.Column="3" Text="{Binding Length}" Width="60"/>
-                                    
-                                    <TextBlock Grid.Column="4" Text="Width:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                    <TextBox Grid.Column="5" Text="{Binding Width}" Width="60"/>
-                                    
-                                    <TextBlock Grid.Column="0" Text="Height:" VerticalAlignment="Center" Grid.Row="1"/>
-                                    <TextBox Grid.Column="1" Text="{Binding Height}" Width="60" Grid.Row="1"/>
-                                    
-                                    <TextBlock Grid.Column="2" Text="Weight:" VerticalAlignment="Center" Margin="10,0,0,0" Grid.Row="1"/>
-                                    <TextBox Grid.Column="3" Text="{Binding Weight}" Width="60" Grid.Row="1"/>
-                                    
-                                    <Button Grid.Column="5" Grid.Row="1" Content="Remove" 
-                                            Command="{Binding $parent[ItemsControl].DataContext.RemoveContainer}"
-                                            CommandParameter="{Binding}"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+            <!-- Остальная часть XAML остается без изменений -->
             
             <Separator Margin="0,10"/>
-<Button Content="Run Algorithm" Command="{Binding RunAlgorithm}" IsEnabled="{Binding !IsRunning}"/>
+            <Button Content="Run Algorithm" Command="{Binding RunAlgorithm}" IsEnabled="{Binding !IsRunning}"/>
             
             <ScrollViewer Height="100" VerticalScrollBarVisibility="Auto" Margin="0,10">
                 <TextBox Text="{Binding ResultText}" IsReadOnly="True" AcceptsReturn="True" 
