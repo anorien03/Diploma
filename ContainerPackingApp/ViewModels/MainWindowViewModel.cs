@@ -36,6 +36,8 @@ namespace ContainerPackingApp.ViewModels
         private string _resultText = "";
         private bool _isRunning;
 
+        private string _running = "";
+
 
         private string _populationSizeError = "";
         private string _generationsCountError = "";
@@ -48,7 +50,10 @@ namespace ContainerPackingApp.ViewModels
         private string _shipHoldMaxWeightError = "";
 
 
+
+
         public ObservableCollection<ContainerViewModel> Containers { get; } = new ObservableCollection<ContainerViewModel>();
+        private string _containersCount = "";
 
 
 
@@ -336,16 +341,51 @@ namespace ContainerPackingApp.ViewModels
         // Проверка перед запуском алгоритма
         public bool CanRunAlgorithm()
         {
-            return string.IsNullOrEmpty(PopulationSizeError) &&
+            if (_isRunning)
+            {
+                ResultText = "";
+                return false;
+            }
+
+            if ((string.IsNullOrEmpty(PopulationSizeError) &&
                    string.IsNullOrEmpty(GenerationsCountError) &&
                    string.IsNullOrEmpty(MutationRateError) &&
                    string.IsNullOrEmpty(TournamentSizeError) &&
-                   string.IsNullOrEmpty(ElitismError) &&
-                   string.IsNullOrEmpty(ShipHoldLengthError) &&
+                   string.IsNullOrEmpty(ElitismError)) == false)
+            {
+                ResultText = "Неверно заданы параматеры генетического алгоритма";
+                return false;
+            }
+
+
+            if ((string.IsNullOrEmpty(ShipHoldLengthError) &&
                    string.IsNullOrEmpty(ShipHoldWidthError) &&
                    string.IsNullOrEmpty(ShipHoldHeightError) &&
-                   string.IsNullOrEmpty(ShipHoldMaxWeightError) &&
-                   !IsRunning;
+                   string.IsNullOrEmpty(ShipHoldMaxWeightError)) == false)
+            {
+                ResultText = "Неверно заданы параматеры трюма";
+                return false;
+            }
+
+
+            if (Containers.Count == 0)
+            {
+                ResultText = "Необходимо ввести список контейнеров";
+                return false;
+            }
+
+
+            foreach (var c in Containers)
+            {
+                if (!c.IsCorrect)
+                {
+                    ResultText = "Неверно заданы параметры контейнеров";
+                    return false;
+                }
+            }
+
+            ResultText = "";
+            return true;
         }
 
 
@@ -356,33 +396,79 @@ namespace ContainerPackingApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref _resultText, value);
         }
 
+
         public bool IsRunning
         {
             get => _isRunning;
             set => this.RaiseAndSetIfChanged(ref _isRunning, value);
         }
 
+
+        public string Running
+        {
+            get => _running;
+            set => this.RaiseAndSetIfChanged(ref _running, value);
+        }
+
+
+        public string ContainersCount
+        {
+            get => _containersCount;
+            set => this.RaiseAndSetIfChanged(ref _containersCount, value);
+        }
+
+
+        private void UpdateContainersCount()
+        {
+            ContainersCount = $"   Всего: {Containers.Count()}";
+        }
+
+
         public void AddContainer()
         {
-            Containers.Add(new ContainerViewModel());
+            var existingIds = Containers.Select(c => c.GetId()).ToList();
+            existingIds.Sort();
+            int newId = 1;
+            foreach (int id in existingIds)
+            {
+                if (id == newId)
+                    newId++;
+                else
+                    break;
+            }
+
+            var newContainer = new ContainerViewModel(newId);
+
+            Containers.Add(newContainer);
+            UpdateContainersCount();
         }
 
         public void RemoveContainer(ContainerViewModel container)
         {
             Containers.Remove(container);
+            UpdateContainersCount();
+        }
+
+
+        public void RemoveAllContainers()
+        {
+            Containers.Clear();
+            UpdateContainersCount();
         }
 
 
 
-        
+
 
 
         public async void RunAlgorithm()
         {
             if (!CanRunAlgorithm()) return;
 
-            IsRunning = true;
-            ResultText = "Running algorithm...";
+            _isRunning = true;
+            Running = "is running...";
+
+
 
             try
             {
@@ -393,7 +479,7 @@ namespace ContainerPackingApp.ViewModels
                     GetShipHoldMaxWeight() ?? 0);
 
                 var containers = Containers.Select(c =>
-                    new Container(c.Id, c.Length, c.Width, c.Height, c.Weight)).ToList();
+                    new Container(c.GetId(), c.GetLength() ?? 0, c.GetWidth() ?? 0, c.GetHeight() ?? 0, c.GetWeight() ?? 0)).ToList();
 
                 var ga = new GeneticAlgorithm(
                     new PackerEMS(),
@@ -415,7 +501,9 @@ namespace ContainerPackingApp.ViewModels
             }
             finally
             {
-                IsRunning = false;
+                _isRunning = false;
+                Running = "";
+                ResultText = "";
             }
         }
 
@@ -436,13 +524,12 @@ namespace ContainerPackingApp.ViewModels
                     var filePath = result.First();
                     var containers = ParseCsvFile(filePath);
 
-                    Containers.Clear();
                     foreach (var container in containers)
                     {
                         Containers.Add(container);
                     }
 
-                    ResultText = $"Успешно загружено {containers.Count} контейнеров";
+                    UpdateContainersCount();
                 }
             }
             catch (Exception ex)
@@ -455,20 +542,30 @@ namespace ContainerPackingApp.ViewModels
         {
             var containers = new List<ContainerViewModel>();
             var lines = File.ReadAllLines(filePath);
+            var existingIds = Containers.Select(c => c.GetId()).ToList();
 
-            foreach (var line in lines.Skip(1)) // Пропускаем заголовок
+            foreach (var line in lines.Skip(1))
             {
                 var parts = line.Split(',');
                 if (parts.Length >= 5)
                 {
-                    containers.Add(new ContainerViewModel
+                    var id = int.Parse(parts[0].Trim());
+
+                    if (existingIds.Contains(id))
                     {
-                        Id = int.Parse(parts[0].Trim()),
-                        Length = int.Parse(parts[1].Trim()),
-                        Width = int.Parse(parts[2].Trim()),
-                        Height = int.Parse(parts[3].Trim()),
-                        Weight = int.Parse(parts[4].Trim())
-                    });
+                        continue;
+                    }
+
+                    var container = new ContainerViewModel(id)
+                    {
+                        LengthInput = parts[1].Trim(),
+                        WidthInput = parts[2].Trim(),
+                        HeightInput = parts[3].Trim(),
+                        WeightInput = parts[4].Trim()
+                    };
+
+                    containers.Add(container);
+                    existingIds.Add(id);
                 }
             }
 
