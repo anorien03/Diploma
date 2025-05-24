@@ -251,6 +251,7 @@ namespace Diploma
                 {
                     int a = random.Next(size);
                     int b = random.Next(size);
+
                     (population[i].Chromosome[a], population[i].Chromosome[b]) = (population[i].Chromosome[b], population[i].Chromosome[a]);
                 }
             }

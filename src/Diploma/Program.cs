@@ -5,7 +5,7 @@ using Diploma.Packers;
 
 Console.WriteLine("Hello, World!");
 
-var sh = new ShipHold(120, 120, 120, 200);
+var sh = new ShipHold(100, 100, 120, 200);
 List<Container> c = new List<Container>() {
 new Container(1, 13, 17, 14, 1),
 new Container(2, 13, 47, 24, 2),
@@ -229,7 +229,13 @@ var packer = new PackerEMS();
 //}
 
 
-var genetic = new GeneticAlgorithm(packer, 100, 400, 30, 2, 5);
+//foreach (var con in c)
+//{
+//    Console.WriteLine($"{con.Id}, {con.Length}, {con.Width}, {con.Height}, {con.Weight}");
+//}
+
+
+var genetic = new GeneticAlgorithm(packer, 200, 200, 30, 2, 5);
 var res = genetic.Run(sh, c);
 
 var coor = res.PackedContainers;
@@ -255,8 +261,3 @@ for (int i = 0; i < coor.Count; i++)
     }
 }
 
-
-//foreach (var con in c)
-//{
-//    Console.WriteLine($"new Container({con.Id}, {con.Length / 10 + 3}, {con.Width / 10 + 7}, {con.Height /10 + 4}, {con.Weight}),");
-//}

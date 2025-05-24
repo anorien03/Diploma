@@ -18,6 +18,9 @@ using System.Globalization;
 using System.Windows;
 using System.Collections.Generic;
 using Avalonia.Controls;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace ContainerPackingApp.ViewModels
 {
@@ -34,9 +37,8 @@ namespace ContainerPackingApp.ViewModels
         private string _shipHoldMaxWeightInput = "100";
 
         private string _resultText = "";
+        private string _errorText = "";
         private bool _isRunning;
-
-        private string _running = "";
 
 
         private string _populationSizeError = "";
@@ -54,6 +56,37 @@ namespace ContainerPackingApp.ViewModels
 
         public ObservableCollection<ContainerViewModel> Containers { get; } = new ObservableCollection<ContainerViewModel>();
         private string _containersCount = "";
+        private bool _hasResults = false;
+
+        public bool HasResults
+        {
+            get => _hasResults;
+            set => this.RaiseAndSetIfChanged(ref _hasResults, value);
+        }
+
+        private ObservableCollection<ContainerInfo> _packedContainers = new();
+        public ObservableCollection<ContainerInfo> PackedContainers
+        {
+            get => _packedContainers;
+            set => this.RaiseAndSetIfChanged(ref _packedContainers, value);
+        }
+
+
+
+        private List<int> _fitnessData = new();
+        public List<int> FitnessData
+        {
+            get => _fitnessData;
+            set => this.RaiseAndSetIfChanged(ref _fitnessData, value);
+        }
+
+        // В методе RunAlgorithm после получения fitnessList:
+        private void UpdateChart(List<int> fitnessList, ShipHold shipHold)
+        {
+            var size = shipHold.Length * shipHold.Width * shipHold.Height;
+            FitnessData = fitnessList.Select(f => (size - f) * 100 / size).ToList();
+            FitnessData.Sort();
+        }
 
 
 
@@ -343,7 +376,7 @@ namespace ContainerPackingApp.ViewModels
         {
             if (_isRunning)
             {
-                ResultText = "";
+                ErrorText = "is running...";
                 return false;
             }
 
@@ -353,7 +386,7 @@ namespace ContainerPackingApp.ViewModels
                    string.IsNullOrEmpty(TournamentSizeError) &&
                    string.IsNullOrEmpty(ElitismError)) == false)
             {
-                ResultText = "Неверно заданы параматеры генетического алгоритма";
+                ErrorText = "Неверно заданы параматеры генетического алгоритма";
                 return false;
             }
 
@@ -363,14 +396,14 @@ namespace ContainerPackingApp.ViewModels
                    string.IsNullOrEmpty(ShipHoldHeightError) &&
                    string.IsNullOrEmpty(ShipHoldMaxWeightError)) == false)
             {
-                ResultText = "Неверно заданы параматеры трюма";
+                ErrorText = "Неверно заданы параматеры трюма";
                 return false;
             }
 
 
             if (Containers.Count == 0)
             {
-                ResultText = "Необходимо ввести список контейнеров";
+                ErrorText = "Необходимо ввести список контейнеров";
                 return false;
             }
 
@@ -384,7 +417,7 @@ namespace ContainerPackingApp.ViewModels
                 }
             }
 
-            ResultText = "";
+            ErrorText = "";
             return true;
         }
 
@@ -404,10 +437,10 @@ namespace ContainerPackingApp.ViewModels
         }
 
 
-        public string Running
+        public string ErrorText
         {
-            get => _running;
-            set => this.RaiseAndSetIfChanged(ref _running, value);
+            get => _errorText;
+            set => this.RaiseAndSetIfChanged(ref _errorText, value);
         }
 
 
@@ -466,7 +499,7 @@ namespace ContainerPackingApp.ViewModels
             if (!CanRunAlgorithm()) return;
 
             _isRunning = true;
-            Running = "is running...";
+            ErrorText = "is running...";
 
 
 
@@ -489,11 +522,27 @@ namespace ContainerPackingApp.ViewModels
                     GetTournamentSize() ?? 2,
                     GetElitism() ?? 5);
 
-                var result = await Task.Run(() => ga.Run(shipHold, containers));
+                var fitnessList = new List<int>();
+                var result = await Task.Run(() => ga.Run(shipHold, containers, out fitnessList));
+                UpdateChart(fitnessList, shipHold);
+                HasResults = true;
+                PackedContainers.Clear();
+                foreach (var container in result.PackedContainers)
+                {
+                    PackedContainers.Add(new ContainerInfo
+                    {
+                        Id = container.Container.Id,
+                        StartCoordinates = $"({container.X0}, {container.Y0}, {container.Z0})",
+                        EndCoordinates = $"({container.X1}, {container.Y1}, {container.Z1})"
+                    });
+                }
 
-                ResultText = $"Algorithm completed!\n" +
-                             $"Packed volume: {result.TotalVolume}\n" +
-                             $"Utilization: {result.TotalVolume / (double)shipHold.Volume * 100:0.##}%";
+                ResultText = $"Количество упакованных контейнеров: {result.PackedContainers.Count}\n" +
+                             $"Суммарный объем упакованных контейнеров: {result.TotalVolume}\n" +
+                             $"Суммарный вес упакованных контейнеров: {result.TotalWeight}\n" +
+                             $"Заполненность трюма: {result.TotalVolume / (double)shipHold.Volume * 100:0.##}\n%" +
+                             $"Количество неупакованных контейнеров (из-за ограниченного объема): {result.UnpackedSpaceContainersId.Count}\n" +
+                             $"Количество неупакованных контейнеров (из-за ограниченной грузоподъемности) : {result.UnpackedWeightContainersId.Count}\n";
             }
             catch (Exception ex)
             {
@@ -502,8 +551,7 @@ namespace ContainerPackingApp.ViewModels
             finally
             {
                 _isRunning = false;
-                Running = "";
-                ResultText = "";
+                ErrorText = "";
             }
         }
 
@@ -574,5 +622,22 @@ namespace ContainerPackingApp.ViewModels
 
         // Добавьте это свойство для доступа к корневому окну
         public Avalonia.Controls.Window VisualRoot { get; set; }
+
+        private PlotModel _plotModel;
+        public PlotModel PlotModel
+        {
+            get => _plotModel;
+            set => this.RaiseAndSetIfChanged(ref _plotModel, value);
+        }
+
+    }
+
+
+
+    public class ContainerInfo
+    {
+        public int Id { get; set; }
+        public string StartCoordinates { get; set; }
+        public string EndCoordinates { get; set; }
     }
 }

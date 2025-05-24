@@ -2,8 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/avalonia"
         xmlns:vm="using:ContainerPackingApp.ViewModels"
         xmlns:converters="using:Avalonia.Data.Converters"
+        xmlns:controls="using:ContainerPackingApp.Controls"
         Width="1500"
         Height="800"
         mc:Ignorable="d" 
@@ -127,21 +129,66 @@
     </ItemsControl.ItemTemplate>
 </ItemsControl>
 
-
             
             <!-- Остальная часть XAML остается без изменений -->
             
             <Separator Margin="0,10"/>
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <Button Content="Run Algorithm" Command="{Binding RunAlgorithm}" IsEnabled="{Binding !IsRunning}"/>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Running}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ResultText}" VerticalAlignment="Center"/>
+                <Button Content="Запустить алгоритм" Command="{Binding RunAlgorithm}" IsEnabled="{Binding !IsRunning}"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ErrorText}" VerticalAlignment="Center"/>
             </StackPanel>
             
-            <ScrollViewer Height="100" VerticalScrollBarVisibility="Auto" Margin="0,10">
-                <TextBox Text="{Binding ResultText}" IsReadOnly="True" AcceptsReturn="True" 
-                         TextWrapping="Wrap" Background="Transparent" BorderThickness="0"/>
-            </ScrollViewer>
+            <TextBox Text="{Binding ResultText}" 
+         IsReadOnly="True" 
+         AcceptsReturn="True"
+         TextWrapping="Wrap"
+         Margin="0,10"
+         Padding="10"
+         BorderBrush="#e0e0e0"
+         BorderThickness="1"
+         MaxHeight="150"/>
+
+
+
+<StackPanel Margin="0,10" IsVisible="{Binding HasResults}">
+    <TextBlock Text="Результаты упаковки:" 
+               FontWeight="Bold"
+               Margin="0,0,0,5"/>
+    
+    <Border BorderBrush="#e0e0e0" 
+            BorderThickness="1"
+            Padding="10">
+        <ItemsControl ItemsSource="{Binding PackedContainers}">
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl">
+                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                </Style>
+            </ItemsControl.Styles>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,0,0,5" 
+                          ColumnDefinitions="Auto,5,Auto,5,Auto,5,Auto,5,Auto,5,Auto">
+                        <TextBlock Text="ID:" Grid.Column="0" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Id}" Grid.Column="2"/>
+                        
+                        <TextBlock Text="Начало:" Grid.Column="4" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding StartCoordinates}" Grid.Column="6"/>
+                        
+                        <TextBlock Text="Конец:" Grid.Column="8" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding EndCoordinates}" Grid.Column="10"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Border>
+</StackPanel>
+
+<!-- График (видим только после расчета) -->
+<controls:GraphControl DataPoints="{Binding FitnessData}" 
+                      Height="300"
+                      Margin="0,10"
+                      IsVisible="{Binding HasResults}"/>
+
         </StackPanel>
     </ScrollViewer>
 </Window>

@@ -34,19 +34,20 @@ namespace ContainerPackingApp
 
 
 
-        public PackerResult Run(ShipHold shipHold, List<Container> containers)
+        public PackerResult Run(ShipHold shipHold, List<Container> containers, out List<int> fitnessList)
         {
             _shipHold = shipHold;
             _containers = containers;
 
             var population = GeneratePopulation(PopulationSize);
+            fitnessList = new List<int>();
 
             for (int g = 0; g < GenerationsCount; g++)
             {
                 SortByFitness(population);
-                Console.WriteLine($"get {g}: fitness = {population[0].Fitness}");
+                fitnessList.Add(population[0].Fitness);
 
-                List<Individual> elites;
+            List<Individual> elites;
                 List<Individual> selected;
                 Partition(population, out elites, out selected);
 

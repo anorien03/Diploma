@@ -13,6 +13,7 @@
     <AvaloniaResource Include="Assets\**" />
     <Folder Include="Models\" />
     <Folder Include="Packers\" />
+    <Folder Include="Controls\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,9 +33,15 @@
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.3.0.1" />
     <PackageReference Include="Avalonia.Xaml.Interactions" Version="11.3.0.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.0" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
+    <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0" />
+    <PackageReference Include="Avalonia.Skia" Version="11.3.0" />
+    <PackageReference Include="NP.Avalonia.Visuals" Version="1.0.38" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Models\" />
     <None Remove="Packers\" />
+    <None Remove="Controls\" />
   </ItemGroup>
 </Project>
