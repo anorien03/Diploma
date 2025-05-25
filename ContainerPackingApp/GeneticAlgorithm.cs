@@ -47,7 +47,7 @@ namespace ContainerPackingApp
                 SortByFitness(population);
                 fitnessList.Add(population[0].Fitness);
 
-            List<Individual> elites;
+                List<Individual> elites;
                 List<Individual> selected;
                 Partition(population, out elites, out selected);
 
@@ -67,6 +67,8 @@ namespace ContainerPackingApp
 
                 population = elites;
                 population.AddRange(offspring);
+
+                SortByFitness(population);
 
                 Mutation(population);
 
@@ -253,7 +255,15 @@ namespace ContainerPackingApp
                 {
                     int a = random.Next(size);
                     int b = random.Next(size);
-                    (population[i].Chromosome[a], population[i].Chromosome[b]) = (population[i].Chromosome[b], population[i].Chromosome[a]);
+                    if (a > b) (a, b) = (b, a);
+                    int c = size - b;
+                    int d = b - a;
+                    if (c > d) (c, d) = (d, c);
+
+                    int genes = random.Next(c + 1);
+
+                    for (int j = 0; j < genes; j++)
+                        (population[i].Chromosome[a + j], population[i].Chromosome[b + j]) = (population[i].Chromosome[b + j], population[i].Chromosome[a + j]);
                 }
             }
         }

@@ -26,7 +26,7 @@ namespace ContainerPackingApp.ViewModels
 {
     public class MainWindowViewModel : ReactiveObject // Изменено с ViewModelBase на ReactiveObject
     {
-        private string _populationSizeInput = "200";
+        private string _populationSizeInput = "100";
         private string _generationsCountInput = "100";
         private string _mutationRateInput = "30";
         private string _tournamentSizeInput = "2";
@@ -81,11 +81,12 @@ namespace ContainerPackingApp.ViewModels
         }
 
         // В методе RunAlgorithm после получения fitnessList:
-        private void UpdateChart(List<int> fitnessList, ShipHold shipHold)
+        private void UpdateChart(List<int> fitnessList, ShipHold shipHold, int el)
         {
             var size = shipHold.Length * shipHold.Width * shipHold.Height;
             FitnessData = fitnessList.Select(f => (size - f) * 100 / size).ToList();
-            FitnessData.Sort();
+            if (el != 0)
+                FitnessData.Sort();
         }
 
 
@@ -514,6 +515,7 @@ namespace ContainerPackingApp.ViewModels
                 var containers = Containers.Select(c =>
                     new Container(c.GetId(), c.GetLength() ?? 0, c.GetWidth() ?? 0, c.GetHeight() ?? 0, c.GetWeight() ?? 0)).ToList();
 
+                var el = GetElitism() ?? 5;
                 var ga = new GeneticAlgorithm(
                     new PackerEMS(),
                     GetPopulationSize() ?? 200,
@@ -524,7 +526,7 @@ namespace ContainerPackingApp.ViewModels
 
                 var fitnessList = new List<int>();
                 var result = await Task.Run(() => ga.Run(shipHold, containers, out fitnessList));
-                UpdateChart(fitnessList, shipHold);
+                UpdateChart(fitnessList, shipHold, el);
                 HasResults = true;
                 PackedContainers.Clear();
                 foreach (var container in result.PackedContainers)
@@ -540,7 +542,7 @@ namespace ContainerPackingApp.ViewModels
                 ResultText = $"Количество упакованных контейнеров: {result.PackedContainers.Count}\n" +
                              $"Суммарный объем упакованных контейнеров: {result.TotalVolume}\n" +
                              $"Суммарный вес упакованных контейнеров: {result.TotalWeight}\n" +
-                             $"Заполненность трюма: {result.TotalVolume / (double)shipHold.Volume * 100:0.##}\n%" +
+                             $"Заполненность трюма: {result.TotalVolume / (double)shipHold.Volume * 100:0.##}%\n" +
                              $"Количество неупакованных контейнеров (из-за ограниченного объема): {result.UnpackedSpaceContainersId.Count}\n" +
                              $"Количество неупакованных контейнеров (из-за ограниченной грузоподъемности) : {result.UnpackedWeightContainersId.Count}\n";
             }
