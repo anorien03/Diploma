@@ -1,0 +1,148 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15" version="27.0.9">
+  <diagram name="Страница — 1" id="oIGkv35JSirXxDSVPZw_">
+    <mxGraphModel dx="969" dy="-2926" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-210" value="Начало" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" vertex="1" parent="1">
+          <mxGeometry x="320" y="3600" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-211" value="population, N, E, T" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="3650" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-212" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZmkryA6pYVP38JDTjNkh-211" target="ZmkryA6pYVP38JDTjNkh-210">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="3750" as="sourcePoint" />
+            <mxPoint x="470" y="3700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-213" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3750" as="sourcePoint" />
+            <mxPoint x="399.5" y="3720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-214" value="Сортировать особей в популяции по значению фитнес-функции" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="3720" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-215" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZmkryA6pYVP38JDTjNkh-214">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3710" as="sourcePoint" />
+            <mxPoint x="400" y="3690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-216" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3830" as="sourcePoint" />
+            <mxPoint x="399.5" y="3800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-217" value="elitesCount = E * 100 / N" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="3800" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-218" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZmkryA6pYVP38JDTjNkh-217">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3790" as="sourcePoint" />
+            <mxPoint x="400" y="3770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-219" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3910" as="sourcePoint" />
+            <mxPoint x="399.5" y="3880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-220" value="Создать массив elites из E первых особей в population" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="3880" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-221" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZmkryA6pYVP38JDTjNkh-220">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3870" as="sourcePoint" />
+            <mxPoint x="400" y="3850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-222" value="Цикл i от 0 до&amp;nbsp;&lt;div&gt;N - elitesCount&lt;/div&gt;" style="shape=loopLimit;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="323.75" y="4060" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-223" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" target="ZmkryA6pYVP38JDTjNkh-220">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3970" as="sourcePoint" />
+            <mxPoint x="400" y="3950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-225" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3970" as="sourcePoint" />
+            <mxPoint x="400" y="3940" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-226" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="399.5" y="4040" as="sourcePoint" />
+            <mxPoint x="399.5" y="4010" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-227" value="Выбрать случайно T&amp;nbsp;&lt;div&gt;особей в population&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="323.75" y="4130" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-228" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="399.5" y="4210" as="sourcePoint" />
+            <mxPoint x="399.5" y="4180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-230" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZmkryA6pYVP38JDTjNkh-229">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="399.5" y="4040" as="sourcePoint" />
+            <mxPoint x="399.5" y="4010" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-231" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="4130" as="sourcePoint" />
+            <mxPoint x="400" y="4100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-232" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="ZmkryA6pYVP38JDTjNkh-229">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="4060" as="sourcePoint" />
+            <mxPoint x="399.5" y="4010" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-229" value="Создать пустой массив selected для отобранных для скрещивания особей" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="3970" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-233" value="Добавить в selected особь с наименьшим значением фитнес-функции" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="323.75" y="4210" width="156.25" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-234" value="i" style="shape=loopLimit;whiteSpace=wrap;html=1;direction=west;" vertex="1" parent="1">
+          <mxGeometry x="321.88" y="4300" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-235" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="4300" as="sourcePoint" />
+            <mxPoint x="400" y="4270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-236" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="4360" as="sourcePoint" />
+            <mxPoint x="400" y="4330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-237" value="elites, selected" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="318.13" y="4360" width="167.5" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-238" value="Конец" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" vertex="1" parent="1">
+          <mxGeometry x="320" y="4420" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmkryA6pYVP38JDTjNkh-239" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="406.13" y="4420" as="sourcePoint" />
+            <mxPoint x="405.63" y="4400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

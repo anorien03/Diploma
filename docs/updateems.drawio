@@ -1,0 +1,163 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15" version="27.0.9">
+  <diagram name="Страница — 1" id="oIGkv35JSirXxDSVPZw_">
+    <mxGraphModel dx="969" dy="-588" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="za3k58IEqD-4_RbIlt8f-2" value="Начало" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" vertex="1" parent="1">
+          <mxGeometry x="320" y="2290" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-3" value="EMS, packedCont" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="2350" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-4" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="za3k58IEqD-4_RbIlt8f-3" target="za3k58IEqD-4_RbIlt8f-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="2440" as="sourcePoint" />
+            <mxPoint x="470" y="2390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-5" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="2420" as="sourcePoint" />
+            <mxPoint x="399.5" y="2390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-6" value="Цикл ems по всем значениям EMS" style="shape=loopLimit;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="2420" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-7" value="ems пересекает&amp;nbsp;&lt;div&gt;или покрывает&amp;nbsp;&lt;/div&gt;&lt;div&gt;packedCont&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="2510" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-8" value="Удалить ems из EMS" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="465" y="2580" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-9" value="" style="endArrow=none;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="za3k58IEqD-4_RbIlt8f-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="365" y="2730" as="sourcePoint" />
+            <mxPoint x="475" y="2560" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="545" y="2560" />
+              <mxPoint x="475" y="2560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-10" value="да" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="460" y="2530" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-11" value="Цикл newems по всем значениям NewEMS" style="shape=loopLimit;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="2750" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-12" value="Проверить, корректный ли newems" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="2840" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-13" value="ems" style="shape=loopLimit;whiteSpace=wrap;html=1;direction=west;" vertex="1" parent="1">
+          <mxGeometry x="320" y="3190" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-17" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" target="za3k58IEqD-4_RbIlt8f-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="549.5" y="2840" as="sourcePoint" />
+            <mxPoint x="549.5" y="2820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-18" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="549.5" y="2640" as="sourcePoint" />
+            <mxPoint x="549.5" y="2620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-19" value="Создать массив NewEMS из 6 новых ems, образованных наложением packedCont и EMS" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="2640" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-20" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="552" y="2750" as="sourcePoint" />
+            <mxPoint x="552" y="2730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-22" value="newems" style="shape=loopLimit;whiteSpace=wrap;html=1;direction=west;" vertex="1" parent="1">
+          <mxGeometry x="470" y="3090" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-23" value="newems&lt;div&gt;&amp;nbsp;корректный&amp;nbsp;&lt;div&gt;и не покрывается&amp;nbsp;&lt;/div&gt;&lt;div&gt;другими ems&lt;/div&gt;&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="2930" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-24" value="Добавить newems в EMS" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="3000" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-25" value="" style="endArrow=none;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="za3k58IEqD-4_RbIlt8f-24">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="515" y="3150" as="sourcePoint" />
+            <mxPoint x="625" y="2980" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="695" y="2980" />
+              <mxPoint x="625" y="2980" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-26" value="да" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="610" y="2950" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-27" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400.5" y="2510" as="sourcePoint" />
+            <mxPoint x="400" y="2480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-28" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="549.5" y="2930" as="sourcePoint" />
+            <mxPoint x="550" y="2900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-29" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="za3k58IEqD-4_RbIlt8f-22" target="za3k58IEqD-4_RbIlt8f-23">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="410" y="3080" as="sourcePoint" />
+            <mxPoint x="410.5" y="3050" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="550" y="3070" />
+              <mxPoint x="440" y="3070" />
+              <mxPoint x="440" y="2980" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-30" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="za3k58IEqD-4_RbIlt8f-24">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="550" y="3070" as="sourcePoint" />
+            <mxPoint x="700.5" y="3060" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="695" y="3070" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-31" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="za3k58IEqD-4_RbIlt8f-13" target="za3k58IEqD-4_RbIlt8f-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260" y="2910" as="sourcePoint" />
+            <mxPoint x="270.5" y="2600" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="400" y="3170" />
+              <mxPoint x="260" y="3170" />
+              <mxPoint x="260" y="2560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-32" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3170" as="sourcePoint" />
+            <mxPoint x="550" y="3140" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="550" y="3170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-34" value="Конец" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" vertex="1" parent="1">
+          <mxGeometry x="320" y="3260" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="za3k58IEqD-4_RbIlt8f-35" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="3260" as="sourcePoint" />
+            <mxPoint x="400" y="3230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,30 @@
+\documentclass[a4paper, 14pt, unknownkeysallowed]{extreport}
+\include{settings}
+
+\begin{document}
+	%\includepdf[pages=1]{title.pdf}
+	\setcounter{page}{3}
+ 	\include{abstract}
+	\counterwithout{lstlisting}{chapter}
+%	\renewcommand{\contentsname}{\LARGE\bfseries\centering СОДЕРЖАНИЕ}
+	\renewcommand{\contentsname}{СОДЕРЖАНИЕ}
+	\tableofcontents
+%	%	
+	%\include {glossary}
+	%\include {abreviations}
+	
+	\include {introduction}
+%%	%	
+%	
+	\include{analysis}
+	\include{design}
+	\include{implementation}
+%	\include{experiment}
+%	
+%
+	\include{conclusion}
+%%	
+	\include{sources}   
+%		
+	\include{application}       
+\end{document}
