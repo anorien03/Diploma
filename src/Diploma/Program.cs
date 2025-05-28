@@ -236,7 +236,8 @@ var packer = new PackerEMS();
 
 
 var genetic = new GeneticAlgorithm(packer, 200, 200, 30, 2, 5);
-var res = genetic.Run(sh, c);
+var fitnessList = new List<int>();
+var res = genetic.Run(sh, c, out fitnessList);
 
 var coor = res.PackedContainers;
 

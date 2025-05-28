@@ -19,6 +19,8 @@ namespace ContainerPackingApp
         public int TournamentSize { get; set; }
         public int Elitism { get; set; }
 
+        private int a { get; }
+
         public GeneticAlgorithm(IPacker packer, int populationSize, int generationsCount, int mutationRate, int tournamentSize, int elitism)
         {
             _packer = packer;
@@ -30,6 +32,9 @@ namespace ContainerPackingApp
 
             _shipHold = new ShipHold(0, 0, 0, 0);
             _containers = new List<Container>();
+
+            var random = new Random();
+            a = 23;
         }
 
 
@@ -44,7 +49,7 @@ namespace ContainerPackingApp
 
             for (int g = 0; g < GenerationsCount; g++)
             {
-                SortByFitness(population);
+                population.Sort(new IndividualComparer());
                 fitnessList.Add(population[0].Fitness);
 
                 List<Individual> elites;
@@ -148,7 +153,7 @@ namespace ContainerPackingApp
         {
             var population = new List<Individual>();
             var containersId = _containers.Select(c => c.Id).ToList();
-
+            
             while (population.Count < size)
             {
                 var random = new Random();
@@ -156,13 +161,30 @@ namespace ContainerPackingApp
                 var chromosome = containersId.OrderBy(x => random.Next()).ToList();
 
                 var exists = false;
+
+
                 for (int j = 0; !exists & j < population.Count; j++)
                 {
                     if (population[j].Chromosome.SequenceEqual(chromosome)) { exists = true; }
                 }
 
+                if (exists)
+                {
+                    continue;
+                }
+
+                var fitness = _shipHold.Volume - _packer.PackContainers(_shipHold, _containers, chromosome).TotalVolume;
+                var f = fitness * 100 / _shipHold.Volume;
+                
+                if (!exists & PopulationSize > 10 & f < a) { exists = true; }
+
                 if (!exists)
-                    population.Add(new Individual(chromosome));
+                {
+                    var ind = new Individual(chromosome);
+                    ind.Fitness = fitness;
+                    population.Add(ind);
+                }
+                    
             }
 
             return population;

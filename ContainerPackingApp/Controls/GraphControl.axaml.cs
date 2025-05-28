@@ -18,7 +18,7 @@ namespace ContainerPackingApp.Controls
         private Pen _axisPen = new Pen(Brushes.Black, 2);
         private Typeface _axisFont = new Typeface("Arial");
         private const int Padding = 40;
-        private const int PointRadius = 3;
+        private const int PointRadius = 2;
 
         public static readonly DirectProperty<GraphControl, List<int>> DataPointsProperty =
             AvaloniaProperty.RegisterDirect<GraphControl, List<int>>(
@@ -93,6 +93,10 @@ namespace ContainerPackingApp.Controls
             }
         }
 
+
+        private const int LeftPadding = 40; // Увеличили отступ слева для значений оси Y
+        private const int BottomPadding = 40; // Отступ снизу
+
         private void DrawAxisLabels(DrawingContext context, double width, double height, double maxY, double minY)
         {
             // Y-axis labels (с шагом 10)
@@ -100,51 +104,90 @@ namespace ContainerPackingApp.Controls
             for (int i = 0; i <= steps; i++)
             {
                 double value = minY + (maxY - minY) * i / steps;
-                double y = height - Padding - (height - 2 * Padding) * i / steps;
+                double y = height - BottomPadding - (height - 2 * BottomPadding) * i / steps;
 
                 var text = new FormattedText(
                     value.ToString("0"),
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     _axisFont,
-                    10,
+                    12,
                     Brushes.Black);
 
-                context.DrawText(text, new Point(5, y - text.Height / 2));
+                // Рисуем значения с новым отступом
+                context.DrawText(text, new Point(LeftPadding - text.Width - 5, y - text.Height / 2));
             }
 
-            // X-axis labels (оставляем как было)
+            // X-axis labels (остается без изменений)
             if (_dataPoints.Count > 1)
             {
-                // Определяем количество меток (не более 10)
                 int labelCount = Math.Min(21, _dataPoints.Count);
-
-                // Рассчитываем шаг для круглых чисел
                 int step = (int)Math.Ceiling(_dataPoints.Count / 10.0);
-                step = ((step + 9) / 10) * 10; // Округляем шаг до ближайшего большего кратного 10
+                step = ((step + 9) / 10) * 10;
 
                 for (int i = 0; i < labelCount; i++)
                 {
-                    // Рассчитываем индекс для круглого числа
                     int index = i * step;
                     if (index >= _dataPoints.Count)
                         index = _dataPoints.Count - 1;
 
-                    // Позиция по X
-                    double x = Padding + (width - 2 * Padding) * index / (_dataPoints.Count - 1);
+                    double x = LeftPadding + (width - LeftPadding - BottomPadding) * index / (_dataPoints.Count - 1);
 
                     var text = new FormattedText(
                         index.ToString(),
                         CultureInfo.CurrentCulture,
                         FlowDirection.LeftToRight,
                         _axisFont,
-                        10,
+                        12,
                         Brushes.Black);
 
-                    context.DrawText(text, new Point(x - text.Width / 2, height - Padding + 5));
+                    context.DrawText(text, new Point(x - text.Width / 2, height - BottomPadding + 5));
+                }
+            }
+
+            // Подпись оси X
+            var xLabel = new FormattedText(
+                "Номер поколения",
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                _axisFont,
+                13,
+                Brushes.Black);
+            context.DrawText(xLabel, new Point(width / 2 - xLabel.Width / 2, height - BottomPadding + 20));
+
+            // Подпись оси Y - слева от увеличенного отступа
+            string yLabelText = "Заполненность трюма (%)";
+            double letterSpacing = 9;
+            double startY = height / 2 + (yLabelText.Length * letterSpacing) / 2; // Изменили знак
+            double xPos = 5;
+
+            for (int i = 0; i < yLabelText.Length; i++)
+            {
+                var letter = new FormattedText(
+                    yLabelText[i].ToString(),
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    _axisFont,
+                    12,
+                    Brushes.Black);
+
+                // 1. Сначала поворачиваем, потом смещаем
+                var transform = Matrix.CreateRotation(-Math.PI / 2) *
+                               Matrix.CreateTranslation(xPos, startY - i * letterSpacing);
+
+                // 2. Альтернативный вариант позиционирования
+                using (context.PushTransform(transform))
+                {
+                    context.DrawText(letter, new Point(0, 0));
+
+                    // Для отладки - рамка вокруг буквы
+                    //context.DrawRectangle(new Pen(Brushes.Red, 1), 
+                    //    new Rect(0, 0, letter.Width, letter.Height));
                 }
             }
         }
+
+
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
@@ -165,5 +208,7 @@ namespace ContainerPackingApp.Controls
             get => GetValue(BackgroundProperty);
             set => SetValue(BackgroundProperty, value);
         }
+
+
     }
 }

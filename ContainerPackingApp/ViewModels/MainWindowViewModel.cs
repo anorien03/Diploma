@@ -303,8 +303,8 @@ namespace ContainerPackingApp.ViewModels
         {
             if (string.IsNullOrWhiteSpace(value))
                 TournamentSizeError = "Поле обязательно для заполнения";
-            else if (!int.TryParse(value, out int num) || num < 2)
-                TournamentSizeError = "Введите число не менее 2";
+            else if (!int.TryParse(value, out int num) || num < 2 || num > 5)
+                TournamentSizeError = "Введите число от 2 до 5";
             else
                 TournamentSizeError = "";
         }
@@ -413,7 +413,19 @@ namespace ContainerPackingApp.ViewModels
             {
                 if (!c.IsCorrect)
                 {
-                    ResultText = "Неверно заданы параметры контейнеров";
+                    ErrorText = "Неверно заданы параметры контейнеров";
+                    return false;
+                }
+            }
+
+            if (Containers.Count < 8)
+            {
+                var fact = 1;
+                for (var a = 2; a <= Containers.Count; a++) { fact *= a; }
+
+                if (fact < GetPopulationSize())
+                {
+                    ErrorText = "Cлишком мало контейнеров для заданного размера популяции";
                     return false;
                 }
             }
@@ -535,13 +547,13 @@ namespace ContainerPackingApp.ViewModels
                     {
                         Id = container.Container.Id,
                         StartCoordinates = $"({container.X0}, {container.Y0}, {container.Z0})",
-                        EndCoordinates = $"({container.X1}, {container.Y1}, {container.Z1})"
+                        EndCoordinates = $"    ({container.X1}, {container.Y1}, {container.Z1})"
                     });
                 }
 
                 ResultText = $"Количество упакованных контейнеров: {result.PackedContainers.Count}\n" +
-                             $"Суммарный объем упакованных контейнеров: {result.TotalVolume}\n" +
-                             $"Суммарный вес упакованных контейнеров: {result.TotalWeight}\n" +
+                             $"Суммарный объем упакованных контейнеров: {result.TotalVolume} дм³\n" +
+                             $"Суммарный вес упакованных контейнеров: {result.TotalWeight} т\n" +
                              $"Заполненность трюма: {result.TotalVolume / (double)shipHold.Volume * 100:0.##}%\n" +
                              $"Количество неупакованных контейнеров (из-за ограниченного объема): {result.UnpackedSpaceContainersId.Count}\n" +
                              $"Количество неупакованных контейнеров (из-за ограниченной грузоподъемности) : {result.UnpackedWeightContainersId.Count}\n";
@@ -584,7 +596,7 @@ namespace ContainerPackingApp.ViewModels
             }
             catch (Exception ex)
             {
-                ResultText = $"Ошибка при загрузке файла: {ex.Message}";
+                ErrorText = $"Ошибка при загрузке файла: {ex.Message}";
             }
         }
 
@@ -613,6 +625,8 @@ namespace ContainerPackingApp.ViewModels
                         HeightInput = parts[3].Trim(),
                         WeightInput = parts[4].Trim()
                     };
+
+
 
                     containers.Add(container);
                     existingIds.Add(id);

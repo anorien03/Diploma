@@ -1,55 +1,61 @@
 ﻿using System;
-using System.Drawing;
-using System.Text;
 using Diploma.Models;
 using Diploma.Packers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Diploma
 {
-	public class GeneticAlgorithm
-	{
-		private IPacker _packer { get; }
-		private ShipHold _shipHold { get; set; }
-		private List<Container> _containers { get; set; }
+    public class GeneticAlgorithm
+    {
+        private IPacker _packer { get; }
+        private ShipHold _shipHold { get; set; }
+        private List<Container> _containers { get; set; }
 
-		public int PopulationSize { get; set; }
-		public int GenerationsCount { get; set; }
-		public int MutationRate { get; set; }
-		public int TournamentSize { get; set; }
-		public int Elitism { get; set; }
+        public int PopulationSize { get; set; }
+        public int GenerationsCount { get; set; }
+        public int MutationRate { get; set; }
+        public int TournamentSize { get; set; }
+        public int Elitism { get; set; }
 
-		public GeneticAlgorithm(IPacker packer, int populationSize, int generationsCount, int mutationRate, int tournamentSize, int elitism)
-		{
-			_packer = packer;
-			PopulationSize = populationSize;
-			GenerationsCount = generationsCount;
-			MutationRate = mutationRate;
-			TournamentSize = tournamentSize;
-			Elitism = elitism;
+        private int a { get; }
 
-			_shipHold = new ShipHold(0, 0, 0, 0);
-			_containers = new List<Container>();
-		}
+        public GeneticAlgorithm(IPacker packer, int populationSize, int generationsCount, int mutationRate, int tournamentSize, int elitism)
+        {
+            _packer = packer;
+            PopulationSize = populationSize;
+            GenerationsCount = generationsCount;
+            MutationRate = mutationRate;
+            TournamentSize = tournamentSize;
+            Elitism = elitism;
+
+            _shipHold = new ShipHold(0, 0, 0, 0);
+            _containers = new List<Container>();
+
+            var random = new Random();
+            a = 23;
+        }
 
 
 
-        public PackerResult Run(ShipHold shipHold, List<Container> containers)
+        public PackerResult Run(ShipHold shipHold, List<Container> containers, out List<int> fitnessList)
         {
             _shipHold = shipHold;
             _containers = containers;
 
             var population = GeneratePopulation(PopulationSize);
+            fitnessList = new List<int>();
 
             for (int g = 0; g < GenerationsCount; g++)
             {
-                SortByFitness(population);
-                Console.WriteLine($"get {g}: fitness = {population[0].Fitness}");
+                population.Sort(new IndividualComparer());
+                fitnessList.Add(population[0].Fitness);
 
                 List<Individual> elites;
                 List<Individual> selected;
                 Partition(population, out elites, out selected);
 
-                
+
                 var offspring = new List<Individual>();
                 Individual child1;
                 Individual child2;
@@ -61,10 +67,12 @@ namespace Diploma
                     offspring.Add(child2);
                 }
 
-                if (selected.Count %2 == 1) { offspring.Add(selected[selected.Count - 1]); }
+                if (selected.Count % 2 == 1) { offspring.Add(selected[selected.Count - 1]); }
 
                 population = elites;
                 population.AddRange(offspring);
+
+                SortByFitness(population);
 
                 Mutation(population);
 
@@ -152,23 +160,40 @@ namespace Diploma
                 var chromosome = containersId.OrderBy(x => random.Next()).ToList();
 
                 var exists = false;
+
+
                 for (int j = 0; !exists & j < population.Count; j++)
                 {
                     if (population[j].Chromosome.SequenceEqual(chromosome)) { exists = true; }
                 }
 
+                if (exists)
+                {
+                    continue;
+                }
+
+                var fitness = _shipHold.Volume - _packer.PackContainers(_shipHold, _containers, chromosome).TotalVolume;
+                var f = fitness * 100 / _shipHold.Volume;
+
+                if (!exists & PopulationSize > 10 & f < a) { exists = true; }
+
                 if (!exists)
-                    population.Add(new Individual(chromosome));
+                {
+                    var ind = new Individual(chromosome);
+                    ind.Fitness = fitness;
+                    population.Add(ind);
+                }
+
             }
 
             return population;
         }
 
 
-		private PackerResult PackContainers(Individual individual)
-		{
-			return _packer.PackContainers(_shipHold, _containers, individual.Chromosome);
-		}
+        private PackerResult PackContainers(Individual individual)
+        {
+            return _packer.PackContainers(_shipHold, _containers, individual.Chromosome);
+        }
 
 
         private void SortByFitness(List<Individual> population)
@@ -203,7 +228,7 @@ namespace Diploma
             int a = random.Next(size);
             int b = random.Next(size);
             if (a > b) (a, b) = (b, a);
-            
+
 
             var chr1 = Enumerable.Repeat(-1, size).ToList();
             var chr2 = Enumerable.Repeat(-1, size).ToList();
@@ -251,14 +276,18 @@ namespace Diploma
                 {
                     int a = random.Next(size);
                     int b = random.Next(size);
+                    if (a > b) (a, b) = (b, a);
+                    int c = size - b;
+                    int d = b - a;
+                    if (c > d) (c, d) = (d, c);
 
-                    (population[i].Chromosome[a], population[i].Chromosome[b]) = (population[i].Chromosome[b], population[i].Chromosome[a]);
+                    int genes = random.Next(c + 1);
+
+                    for (int j = 0; j < genes; j++)
+                        (population[i].Chromosome[a + j], population[i].Chromosome[b + j]) = (population[i].Chromosome[b + j], population[i].Chromosome[a + j]);
                 }
             }
         }
-
-
-
 
     }
 }

@@ -138,7 +138,7 @@
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ErrorText}" VerticalAlignment="Center"/>
             </StackPanel>
             
-            <TextBox Text="{Binding ResultText}" 
+            <TextBox Text="{Binding ResultText}" IsVisible="{Binding HasResults}"
          IsReadOnly="True" 
          AcceptsReturn="True"
          TextWrapping="Wrap"
@@ -150,38 +150,35 @@
 
 
 
-<StackPanel Margin="0,10" IsVisible="{Binding HasResults}">
+<StackPanel Margin="20,10, 800, 10" IsVisible="{Binding HasResults}">
     <TextBlock Text="Результаты упаковки:" 
                FontWeight="Bold"
                Margin="0,0,0,5"/>
     
-    <Border BorderBrush="#e0e0e0" 
-            BorderThickness="1"
-            Padding="10">
-        <ItemsControl ItemsSource="{Binding PackedContainers}">
-            <ItemsControl.Styles>
-                <Style Selector="ItemsControl">
-                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-                </Style>
-            </ItemsControl.Styles>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,0,0,5" 
-                          ColumnDefinitions="Auto,5,Auto,5,Auto,5,Auto,5,Auto,5,Auto">
-                        <TextBlock Text="ID:" Grid.Column="0" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Id}" Grid.Column="2"/>
-                        
-                        <TextBlock Text="Начало:" Grid.Column="4" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding StartCoordinates}" Grid.Column="6"/>
-                        
-                        <TextBlock Text="Конец:" Grid.Column="8" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding EndCoordinates}" Grid.Column="10"/>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </Border>
+    <ItemsControl ItemsSource="{Binding PackedContainers}" Margin="0,10">
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,5">
+                <Grid ColumnDefinitions="40,60,100,*,100,*" RowDefinitions="Auto,Auto" RowSpacing="5">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Id:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Id}" VerticalAlignment="Center"/>
+                     <TextBlock Grid.Row="0" Grid.Column="2" Text="Начало:" VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding StartCoordinates}" VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="4" Text="Конец:" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="5" Text="{Binding EndCoordinates}" VerticalAlignment="Center"/>
+                    
+                    
+                </Grid>
+
+            </Border>
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
+
 </StackPanel>
+
 
 <!-- График (видим только после расчета) -->
 <controls:GraphControl DataPoints="{Binding FitnessData}" 
