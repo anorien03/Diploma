@@ -51,6 +51,8 @@ namespace Diploma
                 population.Sort(new IndividualComparer());
                 fitnessList.Add(population[0].Fitness);
 
+                Console.WriteLine($"Поколение {g}: {population[0].Fitness}");
+
                 List<Individual> elites;
                 List<Individual> selected;
                 Partition(population, out elites, out selected);
@@ -175,7 +177,7 @@ namespace Diploma
                 var fitness = _shipHold.Volume - _packer.PackContainers(_shipHold, _containers, chromosome).TotalVolume;
                 var f = fitness * 100 / _shipHold.Volume;
 
-                if (!exists & PopulationSize > 10 & f < a) { exists = true; }
+                //if (!exists & PopulationSize > 8 & f < a) { exists = true; }
 
                 if (!exists)
                 {
