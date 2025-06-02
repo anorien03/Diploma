@@ -51,7 +51,7 @@ namespace Diploma
                 population.Sort(new IndividualComparer());
                 fitnessList.Add(population[0].Fitness);
 
-                Console.WriteLine($"Поколение {g}: {population[0].Fitness}");
+                //Console.WriteLine($"Поколение {g}: {population[0].Fitness}");
 
                 List<Individual> elites;
                 List<Individual> selected;

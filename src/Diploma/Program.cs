@@ -268,7 +268,7 @@ List<int> chr = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
 
 
 
-var sh = new ShipHold(250, 200, 177, 2200);
+var sh = new ShipHold(203, 121, 83, 530);
 List<Container> cont = new List<Container>() {
 // Оригинальные контейнеры с исправленными ID
 new Container(1, 30, 24, 26, 6),   // 10-foot
@@ -326,212 +326,305 @@ new Container(47, 66, 24, 26, 17),  // +5L -10.5%W
 new Container(48, 61, 27, 29, 9),   // +3W -18.2%W
 new Container(49, 61, 25, 31, 22),  // +5H -4.3%W
 new Container(50, 56, 24, 26, 21), // -5L +10.5%W
-new Container(51, 61, 21, 29, 13), // -3W +18.2%W
-new Container(52, 61, 25, 21, 24),  // -5H +4.3%W
-new Container(53, 70, 24, 26, 18),  // +9L -5.3%W
-new Container(54, 61, 28, 29, 10),  // +4W -9.1%W
-new Container(55, 61, 25, 34, 21),  // +8H -8.7%W
-new Container(56, 55, 25, 29, 27),  // -6L +8%W
+//new Container(51, 61, 21, 29, 13), // -3W +18.2%W
+//new Container(52, 61, 25, 21, 24),  // -5H +4.3%W
+//new Container(53, 70, 24, 26, 18),  // +9L -5.3%W
+//new Container(54, 61, 28, 29, 10),  // +4W -9.1%W
+//new Container(55, 61, 25, 34, 21),  // +8H -8.7%W
+//new Container(56, 55, 25, 29, 27),  // -6L +8%W
 
-// Группа 30-foot (основа: ID 9-12)
-new Container(57, 97, 24, 26, 18),  // +5L -5.3%W
-new Container(58, 92, 27, 29, 13),  // +3W -7.1%W
-new Container(59, 92, 25, 31, 15),  // +5H -6.3%W
-new Container(60, 87, 24, 26, 20),  // -5L +5.3%W
-new Container(61, 92, 21, 29, 16),  // -3W +14.3%W
-new Container(62, 92, 25, 21, 17),  // -5H +6.3%W
-new Container(63, 100, 24, 26, 18), // +8L -5.3%W
-new Container(64, 92, 20, 29, 15),  // -4W +7.1%W
-new Container(65, 92, 25, 35, 14), // +9H
-new Container(66, 85, 25, 29, 18),  // -7L +20%W
+//// Группа 30-foot (основа: ID 9-12)
+//new Container(57, 97, 24, 26, 18),  // +5L -5.3%W
+//new Container(58, 92, 27, 29, 13),  // +3W -7.1%W
+//new Container(59, 92, 25, 31, 15),  // +5H -6.3%W
+//new Container(60, 87, 24, 26, 20),  // -5L +5.3%W
+//new Container(61, 92, 21, 29, 16),  // -3W +14.3%W
+//new Container(62, 92, 25, 21, 17),  // -5H +6.3%W
+//new Container(63, 100, 24, 26, 18), // +8L -5.3%W
+//new Container(64, 92, 20, 29, 15),  // -4W +7.1%W
+//new Container(65, 92, 25, 35, 14), // +9H
+//new Container(66, 85, 25, 29, 18),  // -7L +20%W
 
-// Группа 40-foot (основа: ID 13-16)
-new Container(67, 127, 24, 26, 11), // +5L -8.3%W
-new Container(68, 122, 27, 29, 10), // +3W -9.1%W
-new Container(69, 122, 25, 31, 15), // +5H -6.3%W
-new Container(70, 117, 24, 26, 13), // -5L +8.3%W
-new Container(71, 122, 21, 29, 13), // -3W +18.2%W
-new Container(72, 122, 25, 21, 17), // -5H +6.3%W
-new Container(73, 130, 24, 26, 11), // +8L -8.3%W
-new Container(74, 122, 20, 29, 12), // -4W +9.1%W
-new Container(75, 122, 25, 35, 14), // +9H -12.5%W
-new Container(76, 115, 25, 29, 19), // -7L +18.8%W
+//// Группа 40-foot (основа: ID 13-16)
+//new Container(67, 127, 24, 26, 11), // +5L -8.3%W
+//new Container(68, 122, 27, 29, 10), // +3W -9.1%W
+//new Container(69, 122, 25, 31, 15), // +5H -6.3%W
+//new Container(70, 117, 24, 26, 13), // -5L +8.3%W
+//new Container(71, 122, 21, 29, 13), // -3W +18.2%W
+//new Container(72, 122, 25, 21, 17), // -5H +6.3%W
+//new Container(73, 130, 24, 26, 11), // +8L -8.3%W
+//new Container(74, 122, 20, 29, 12), // -4W +9.1%W
+//new Container(75, 122, 25, 35, 14), // +9H -12.5%W
+//new Container(76, 115, 25, 29, 19), // -7L +18.8%W
 
-// Группа 45-foot (основа: ID 17-20)
-new Container(77, 143, 24, 26, 16), // +5L -11.1%W
-new Container(78, 138, 27, 29, 19), // +3W -9.5%W
-new Container(79, 138, 25, 31, 23), // +5H -4.2%W
-new Container(80, 133, 24, 26, 20), // -5L +11.1%W
-new Container(81, 138, 21, 29, 25), // -3W +19%W
-new Container(82, 138, 25, 21, 26), // -5H +8.3%W
-new Container(83, 145, 24, 26, 17), // +7L -5.6%W
-new Container(84, 138, 20, 29, 22), // -4W +4.8%W
-new Container(85, 138, 25, 35, 21), // +9H -12.5%W
-new Container(86, 130, 25, 29, 30), // -8L +25%W
+//// Группа 45-foot (основа: ID 17-20)
+//new Container(77, 143, 24, 26, 16), // +5L -11.1%W
+//new Container(78, 138, 27, 29, 19), // +3W -9.5%W
+//new Container(79, 138, 25, 31, 23), // +5H -4.2%W
+//new Container(80, 133, 24, 26, 20), // -5L +11.1%W
+//new Container(81, 138, 21, 29, 25), // -3W +19%W
+//new Container(82, 138, 25, 21, 26), // -5H +8.3%W
+//new Container(83, 145, 24, 26, 17), // +7L -5.6%W
+//new Container(84, 138, 20, 29, 22), // -4W +4.8%W
+//new Container(85, 138, 25, 35, 21), // +9H -12.5%W
+//new Container(86, 130, 25, 29, 30), // -8L +25%W
 
-// Группа 53-foot (основа: ID 21-22)
-new Container(87, 167, 26, 29, 28), // +5L -6.7%W
-new Container(88, 162, 29, 31, 33), // +3W -8.3%W
-new Container(89, 162, 26, 36, 29), // +7H -3.3%W
-new Container(90, 157, 26, 29, 32), // -5L +6.7%W
-new Container(91, 162, 23, 31, 39), // -3W +8.3%W
-new Container(92, 162, 26, 25, 33), // -6H +10%W
-new Container(93, 170, 26, 29, 27), // +8L -10%W
-new Container(94, 162, 20, 31, 37), // -6W +2.8%W
-new Container(95, 162, 26, 38, 28), // +9H -6.7%W
-new Container(96, 155, 26, 29, 34), // -7L +13.3%W
+//// Группа 53-foot (основа: ID 21-22)
+//new Container(87, 167, 26, 29, 28), // +5L -6.7%W
+//new Container(88, 162, 29, 31, 33), // +3W -8.3%W
+//new Container(89, 162, 26, 36, 29), // +7H -3.3%W
+//new Container(90, 157, 26, 29, 32), // -5L +6.7%W
+//new Container(91, 162, 23, 31, 39), // -3W +8.3%W
+//new Container(92, 162, 26, 25, 33), // -6H +10%W
+//new Container(93, 170, 26, 29, 27), // +8L -10%W
+//new Container(94, 162, 20, 31, 37), // -6W +2.8%W
+//new Container(95, 162, 26, 38, 28), // +9H -6.7%W
+//new Container(96, 155, 26, 29, 34), // -7L +13.3%W
 
-// Группа малых контейнеров (6-9 foot, основа: ID 23-30)
-new Container(97, 22, 25, 25, 3),   // +3L
-new Container(98, 19, 28, 29, 3),   // +3W -25%W
-new Container(99, 19, 25, 32, 4),   // +7H
-new Container(100, 16, 25, 25, 5),  // -3L +66.7%W
-// 16-foot контейнеры (основа: ID 31-32)
-new Container(101, 52, 25, 25, 9),   // +3L -10%W
-new Container(102, 49, 28, 29, 12),  // +3W -7.7%W
-new Container(103, 49, 25, 32, 11),  // +7H -15.4%W
-new Container(104, 46, 25, 25, 12),  // -3L +20%W
-new Container(105, 49, 22, 29, 14),  // -3W +7.7%W
-new Container(106, 49, 25, 22, 15),  // -3H +15.4%W
-new Container(107, 54, 25, 25, 8),   // +5L -20%W
-new Container(108, 49, 20, 29, 15),  // -5W +15.4%W
-new Container(109, 49, 25, 35, 10),  // +10H -23.1%W
-new Container(110, 44, 25, 29, 16),  // -5L +23.1%W
+//// Группа малых контейнеров (6-9 foot, основа: ID 23-30)
+//new Container(97, 22, 25, 25, 3),   // +3L
+//new Container(98, 19, 28, 29, 3),   // +3W -25%W
+//new Container(99, 19, 25, 32, 4),   // +7H
+//new Container(100, 16, 25, 25, 5),  // -3L +66.7%W
+//// 16-foot контейнеры (основа: ID 31-32)
+//new Container(101, 52, 25, 25, 9),   // +3L -10%W
+//new Container(102, 49, 28, 29, 12),  // +3W -7.7%W
+//new Container(103, 49, 25, 32, 11),  // +7H -15.4%W
+//new Container(104, 46, 25, 25, 12),  // -3L +20%W
+//new Container(105, 49, 22, 29, 14),  // -3W +7.7%W
+//new Container(106, 49, 25, 22, 15),  // -3H +15.4%W
+//new Container(107, 54, 25, 25, 8),   // +5L -20%W
+//new Container(108, 49, 20, 29, 15),  // -5W +15.4%W
+//new Container(109, 49, 25, 35, 10),  // +10H -23.1%W
+//new Container(110, 44, 25, 29, 16),  // -5L +23.1%W
 
-// 24-foot контейнеры (основа: ID 33-34)
-new Container(111, 77, 25, 25, 17),  // +3L -5.6%W
-new Container(112, 74, 28, 26, 18),  // +3W -5.3%W
-new Container(113, 74, 25, 31, 17),  // +5H -5.6%W
-new Container(114, 71, 25, 25, 19),  // -3L +5.6%W
-new Container(115, 74, 22, 26, 20),  // -3W +5.3%W
-new Container(116, 74, 25, 21, 20),  // -5H +5.6%W
-new Container(117, 80, 25, 25, 16),  // +6L -11.1%W
-new Container(118, 74, 20, 26, 21),  // -5W +10.5%W
-new Container(119, 74, 25, 35, 15),  // +10H -16.7%W
-new Container(120, 68, 25, 26, 22),  // -6L +15.8%W
+//// 24-foot контейнеры (основа: ID 33-34)
+//new Container(111, 77, 25, 25, 17),  // +3L -5.6%W
+//new Container(112, 74, 28, 26, 18),  // +3W -5.3%W
+//new Container(113, 74, 25, 31, 17),  // +5H -5.6%W
+//new Container(114, 71, 25, 25, 19),  // -3L +5.6%W
+//new Container(115, 74, 22, 26, 20),  // -3W +5.3%W
+//new Container(116, 74, 25, 21, 20),  // -5H +5.6%W
+//new Container(117, 80, 25, 25, 16),  // +6L -11.1%W
+//new Container(118, 74, 20, 26, 21),  // -5W +10.5%W
+//new Container(119, 74, 25, 35, 15),  // +10H -16.7%W
+//new Container(120, 68, 25, 26, 22),  // -6L +15.8%W
 
-// 48-foot контейнеры (основа: ID 35-36)
-new Container(121, 150, 25, 25, 26), // +3L -7.1%W
-new Container(122, 147, 28, 29, 30), // +3W -6.3%W
-new Container(123, 147, 25, 32, 27), // +7H -3.6%W
-new Container(124, 144, 25, 25, 30), // -3L +7.1%W
-new Container(125, 147, 22, 29, 33), // -3W +3.1%W
-new Container(126, 147, 25, 22, 30), // -3H +7.1%W
-new Container(127, 155, 25, 25, 25), // +8L -10.7%W
-new Container(128, 147, 20, 29, 35), // -5W +9.4%W
-new Container(129, 147, 25, 38, 26), // +10H -7.1%W
-new Container(130, 140, 25, 29, 34), // -7L +6.3%W
+//// 48-foot контейнеры (основа: ID 35-36)
+//new Container(121, 150, 25, 25, 26), // +3L -7.1%W
+//new Container(122, 147, 28, 29, 30), // +3W -6.3%W
+//new Container(123, 147, 25, 32, 27), // +7H -3.6%W
+//new Container(124, 144, 25, 25, 30), // -3L +7.1%W
+//new Container(125, 147, 22, 29, 33), // -3W +3.1%W
+//new Container(126, 147, 25, 22, 30), // -3H +7.1%W
+//new Container(127, 155, 25, 25, 25), // +8L -10.7%W
+//new Container(128, 147, 20, 29, 35), // -5W +9.4%W
+//new Container(129, 147, 25, 38, 26), // +10H -7.1%W
+//new Container(130, 140, 25, 29, 34), // -7L +6.3%W
 
-// Дополнительные 10-foot вариации
-new Container(131, 36, 24, 26, 5),  // +6L -16.7%W
-new Container(132, 30, 30, 29, 6),   // +6W -14.3%W
-new Container(133, 30, 24, 34, 7),   // +8H
-new Container(134, 24, 24, 26, 8),   // -6L +33.3%W
-new Container(135, 30, 18, 29, 9),   // -6W +28.6%W
+//// Дополнительные 10-foot вариации
+//new Container(131, 36, 24, 26, 5),  // +6L -16.7%W
+//new Container(132, 30, 30, 29, 6),   // +6W -14.3%W
+//new Container(133, 30, 24, 34, 7),   // +8H
+//new Container(134, 24, 24, 26, 8),   // -6L +33.3%W
+//new Container(135, 30, 18, 29, 9),   // -6W +28.6%W
 
-// Дополнительные 20-foot вариации
-new Container(136, 70, 24, 26, 17),  // +9L -10.5%W
-new Container(137, 61, 30, 29, 9),   // +6W -18.2%W
-new Container(138, 61, 24, 35, 20),  // +9H -13%W
-new Container(139, 55, 24, 26, 22),  // -6L +15.8%W
-new Container(140, 61, 18, 29, 13),  // -6W +18.2%W
+//// Дополнительные 20-foot вариации
+//new Container(136, 70, 24, 26, 17),  // +9L -10.5%W
+//new Container(137, 61, 30, 29, 9),   // +6W -18.2%W
+//new Container(138, 61, 24, 35, 20),  // +9H -13%W
+//new Container(139, 55, 24, 26, 22),  // -6L +15.8%W
+//new Container(140, 61, 18, 29, 13),  // -6W +18.2%W
 
-// Дополнительные 30-foot вариации
-new Container(141, 100, 24, 26, 18), // +8L -5.3%W
-new Container(142, 92, 30, 29, 12),  // +6W -14.3%W
-new Container(143, 92, 24, 35, 15),  // +9H -6.3%W
-new Container(144, 85, 24, 26, 20),  // -7L +5.3%W
-new Container(145, 92, 18, 29, 16),  // -6W +14.3%W
+//// Дополнительные 30-foot вариации
+//new Container(141, 100, 24, 26, 18), // +8L -5.3%W
+//new Container(142, 92, 30, 29, 12),  // +6W -14.3%W
+//new Container(143, 92, 24, 35, 15),  // +9H -6.3%W
+//new Container(144, 85, 24, 26, 20),  // -7L +5.3%W
+//new Container(145, 92, 18, 29, 16),  // -6W +14.3%W
 
-// Дополнительные 40-foot вариации
-new Container(146, 130, 24, 26, 11), // +8L -8.3%W
-new Container(147, 122, 30, 29, 9),  // +6W -18.2%W
-new Container(148, 122, 24, 35, 14), // +9H -12.5%W
-new Container(149, 115, 24, 26, 13), // -7L +8.3%W
-new Container(150, 122, 18, 29, 13), // -6W +18.2%W
+//// Дополнительные 40-foot вариации
+//new Container(146, 130, 24, 26, 11), // +8L -8.3%W
+//new Container(147, 122, 30, 29, 9),  // +6W -18.2%W
+//new Container(148, 122, 24, 35, 14), // +9H -12.5%W
+//new Container(149, 115, 24, 26, 13), // -7L +8.3%W
+//new Container(150, 122, 18, 29, 13), // -6W +18.2%W
 
-// Дополнительные 45-foot вариации
-new Container(151, 145, 24, 26, 17), // +7L -5.6%W
-new Container(152, 138, 30, 29, 18), // +6W -14.3%W
-new Container(153, 138, 24, 35, 21), // +9H -12.5%W
-new Container(154, 130, 24, 26, 20), // -8L +11.1%W
-new Container(155, 138, 18, 29, 25), // -6W +19%W
+//// Дополнительные 45-foot вариации
+//new Container(151, 145, 24, 26, 17), // +7L -5.6%W
+//new Container(152, 138, 30, 29, 18), // +6W -14.3%W
+//new Container(153, 138, 24, 35, 21), // +9H -12.5%W
+//new Container(154, 130, 24, 26, 20), // -8L +11.1%W
+//new Container(155, 138, 18, 29, 25), // -6W +19%W
 
-// Дополнительные 53-foot вариации
-new Container(156, 170, 26, 29, 27), // +8L -10%W
-new Container(157, 162, 32, 31, 33), // +6W -8.3%W
-new Container(158, 162, 26, 38, 29), // +9H -3.3%W
-new Container(159, 155, 26, 29, 32), // -7L +6.7%W
-new Container(160, 162, 20, 31, 37), // -6W +2.8%W
+//// Дополнительные 53-foot вариации
+//new Container(156, 170, 26, 29, 27), // +8L -10%W
+//new Container(157, 162, 32, 31, 33), // +6W -8.3%W
+//new Container(158, 162, 26, 38, 29), // +9H -3.3%W
+//new Container(159, 155, 26, 29, 32), // -7L +6.7%W
+//new Container(160, 162, 20, 31, 37), // -6W +2.8%W
 
-// Дополнительные 6-foot вариации
-new Container(161, 22, 25, 25, 3),   // +3L
-new Container(162, 19, 28, 29, 3),   // +3W -25%W
-new Container(163, 19, 25, 32, 4),   // +7H
-new Container(164, 16, 25, 25, 5),   // -3L +66.7%W
-new Container(165, 19, 22, 29, 4),   // -3W
+//// Дополнительные 6-foot вариации
+//new Container(161, 22, 25, 25, 3),   // +3L
+//new Container(162, 19, 28, 29, 3),   // +3W -25%W
+//new Container(163, 19, 25, 32, 4),   // +7H
+//new Container(164, 16, 25, 25, 5),   // -3L +66.7%W
+//new Container(165, 19, 22, 29, 4),   // -3W
 
-// Дополнительные 7-foot вариации
-new Container(166, 25, 25, 25, 4),   // +3L
-new Container(167, 22, 28, 29, 4),   // +3W -20%W
-new Container(168, 22, 25, 32, 5),   // +7H
-new Container(169, 19, 25, 25, 6),   // -3L +50%W
-new Container(170, 22, 22, 29, 6),   // -3W +20%W
+//// Дополнительные 7-foot вариации
+//new Container(166, 25, 25, 25, 4),   // +3L
+//new Container(167, 22, 28, 29, 4),   // +3W -20%W
+//new Container(168, 22, 25, 32, 5),   // +7H
+//new Container(169, 19, 25, 25, 6),   // -3L +50%W
+//new Container(170, 22, 22, 29, 6),   // -3W +20%W
 
-// Дополнительные 8-foot вариации
-new Container(171, 28, 25, 25, 4),   // +3L
-new Container(172, 25, 28, 26, 5),   // +3W -16.7%W
-new Container(173, 25, 25, 32, 6),   // +7H
-new Container(174, 22, 25, 25, 7),   // -3L +16.7%W
-new Container(175, 25, 22, 26, 7),   // -3W +16.7%W
+//// Дополнительные 8-foot вариации
+//new Container(171, 28, 25, 25, 4),   // +3L
+//new Container(172, 25, 28, 26, 5),   // +3W -16.7%W
+//new Container(173, 25, 25, 32, 6),   // +7H
+//new Container(174, 22, 25, 25, 7),   // -3L +16.7%W
+//new Container(175, 25, 22, 26, 7),   // -3W +16.7%W
 
-// Дополнительные 9-foot вариации
-new Container(176, 31, 25, 25, 6),   // +3L
-new Container(177, 28, 28, 25, 5),   // +3W -16.7%W
-new Container(178, 28, 26, 32, 7),   // +7H -12.5%W
-new Container(179, 25, 25, 25, 8),   // -3L +33.3%W
-new Container(180, 28, 22, 25, 7),   // -3W +16.7%W
+//// Дополнительные 9-foot вариации
+//new Container(176, 31, 25, 25, 6),   // +3L
+//new Container(177, 28, 28, 25, 5),   // +3W -16.7%W
+//new Container(178, 28, 26, 32, 7),   // +7H -12.5%W
+//new Container(179, 25, 25, 25, 8),   // -3L +33.3%W
+//new Container(180, 28, 22, 25, 7),   // -3W +16.7%W
 
-// Специальные смешанные вариации
-new Container(181, 40, 22, 28, 8),   // комбинированные изменения
-new Container(182, 55, 27, 24, 15),
-new Container(183, 88, 23, 30, 17),
-new Container(184, 118, 27, 25, 14),
-new Container(185, 140, 23, 32, 26),
-new Container(186, 160, 28, 30, 31),
-new Container(187, 20, 27, 27, 5),
-new Container(188, 45, 23, 30, 12),
-new Container(189, 75, 27, 23, 19),
-new Container(190, 110, 23, 32, 15),
+//// Специальные смешанные вариации
+//new Container(181, 40, 22, 28, 8),   // комбинированные изменения
+//new Container(182, 55, 27, 24, 15),
+//new Container(183, 88, 23, 30, 17),
+//new Container(184, 118, 27, 25, 14),
+//new Container(185, 140, 23, 32, 26),
+//new Container(186, 160, 28, 30, 31),
+//new Container(187, 20, 27, 27, 5),
+//new Container(188, 45, 23, 30, 12),
+//new Container(189, 75, 27, 23, 19),
+//new Container(190, 110, 23, 32, 15),
 
-// Экстремальные вариации (±10 единиц)
-new Container(191, 20, 24, 26, 7),   // -10L +16.7%W
-new Container(192, 30, 34, 29, 6),   // +10W -14.3%W
-new Container(193, 30, 24, 36, 5),   // +10H -16.7%W
-new Container(194, 71, 24, 26, 21),  // +10L +10.5%W
-new Container(195, 61, 34, 29, 9),   // +10W -18.2%W
-new Container(196, 61, 24, 36, 18),  // +10H -21.7%W
-new Container(197, 132, 24, 26, 14), // +10L +16.7%W
-new Container(198, 122, 34, 29, 9),  // +10W -18.2%W
-new Container(199, 122, 24, 36, 13), // +10H +8.3%W
-new Container(200, 152, 26, 29, 33)  // -10L +10%W
+//// Экстремальные вариации (±10 единиц)
+//new Container(191, 20, 24, 26, 7),   // -10L +16.7%W
+//new Container(192, 30, 34, 29, 6),   // +10W -14.3%W
+//new Container(193, 30, 24, 36, 5),   // +10H -16.7%W
+//new Container(194, 71, 24, 26, 21),  // +10L +10.5%W
+//new Container(195, 61, 34, 29, 9),   // +10W -18.2%W
+//new Container(196, 61, 24, 36, 18),  // +10H -21.7%W
+//new Container(197, 132, 24, 26, 14), // +10L +16.7%W
+//new Container(198, 122, 34, 29, 9),  // +10W -18.2%W
+//new Container(199, 122, 24, 36, 13), // +10H +8.3%W
+//new Container(200, 152, 26, 29, 33)  // -10L +10%W
 };
 
 
 var fitnessList = new List<int>();
+var sum1 = new List<int>() { };
+for (int i = 0; i < 200; i++)
+{
+    sum1.Add(0);
+}
+
+var sum2 = new List<int>() { };
+for (int i = 0; i < 200; i++)
+{
+    sum2.Add(0);
+}
+
+var sum3 = new List<int>() { };
+for (int i = 0; i < 200; i++)
+{
+    sum3.Add(0);
+}
+
+var sum4 = new List<int>() { };
+for (int i = 0; i < 200; i++)
+{
+    sum4.Add(0);
+}
+
+
 
 var packer = new PackerEMS();
-//var res = packer.PackContainers(sh,cont, new List<int>() { 4, 8, 3, 5, 6, 7, 2, 1, 9 });
-var genetic = new GeneticAlgorithm(packer, 400, 800, 30, 2, 5);
-var res = genetic.Run(sh, cont, out fitnessList);
+//var res = packer.PackContainers(sh, cont, new List<int>() { 4, 8, 3, 5, 6, 7, 2, 1, 9 });
 
-Console.WriteLine(res.TotalVolume * 100 / sh.Volume);
-Console.WriteLine(sh.Volume - res.TotalVolume);
-Console.WriteLine(res.UnpackedSpaceContainersId.Count);
-Console.WriteLine(res.UnpackedWeightContainersId.Count);
-Console.WriteLine(res.TotalWeight);
+
+var genetic1 = new GeneticAlgorithm(packer, 100, 200, 20, 3, 0);
+for (int i = 0; i < 20; i++)
+{
+    var res = genetic1.Run(sh, cont, out fitnessList);
+    for (int j = 0; j < 200; j++) { sum1[j] += fitnessList[j]; }
+    fitnessList = new List<int>();
+}
+
+
+
+
+//var genetic2 = new GeneticAlgorithm(packer, 100, 200, 20, 4, 10);
+
+//for (int i = 0; i < 20; i++)
+//{
+//    var res = genetic2.Run(sh, cont, out fitnessList);
+//    for (int j = 0; j < 200; j++) { sum2[j] += fitnessList[j]; }
+//    fitnessList = new List<int>();
+//}
+
+
+
+
+
+//var genetic3 = new GeneticAlgorithm(packer, 100, 200, 20, 4, 20);
+
+//for (int i = 0; i < 20; i++)
+//{
+//    var res = genetic3.Run(sh, cont, out fitnessList);
+//    for (int j = 0; j < 200; j++) { sum3[j] += fitnessList[j]; }
+//    fitnessList = new List<int>();
+//}
+
+
+
+
+//var genetic4 = new GeneticAlgorithm(packer, 100, 200, 20, 4, 30);
+
+//for (int i = 0; i < 20; i++)
+//{
+//    var res = genetic4.Run(sh, cont, out fitnessList);
+//    for (int j = 0; j < 200; j++) { sum4[j] += fitnessList[j]; }
+//    fitnessList = new List<int>();
+//}
+
+
+
 Console.WriteLine();
-foreach (var a in fitnessList) { Console.Write($"{a}, "); }
+foreach (var a in sum1) { Console.Write($"{a / 20}, "); }
+
+Console.WriteLine();
+
+
+//Console.WriteLine();
+//foreach (var a in sum2) { Console.Write($"{a / 20}, "); }
+
+//Console.WriteLine();
+
+
+//Console.WriteLine();
+//foreach (var a in sum3) { Console.Write($"{a / 20}, "); }
+
+//Console.WriteLine();
+
+//Console.WriteLine();
+//foreach (var a in sum4) { Console.Write($"{a / 20}, "); }
+
+//Console.WriteLine();
+
+
+//Console.WriteLine(res.TotalVolume * 100 / sh.Volume);
+//Console.WriteLine(sh.Volume - res.TotalVolume);
+//Console.WriteLine(res.UnpackedSpaceContainersId.Count);
+//Console.WriteLine(res.UnpackedWeightContainersId.Count);
+//Console.WriteLine(res.TotalWeight);
+//Console.WriteLine();
 
 Console.WriteLine();
 
@@ -544,8 +637,8 @@ foreach (var c in cont) { total += c.Volume; }
 
 Console.WriteLine(total);
 
-foreach (var a in res.PackedContainers) { Console.WriteLine($"(({a.X0}, {a.Y0}, {a.Z0}), ({a.X1 - a.X0}, {a.Y1 - a.Y0}, {a.Z1 - a.Z0})),"); }
-foreach (var a in res.PackedContainers) { Console.WriteLine($"({a.Container.Id})),"); }
+//foreach (var a in res.PackedContainers) { Console.WriteLine($"(({a.X0}, {a.Y0}, {a.Z0}), ({a.X1 - a.X0}, {a.Y1 - a.Y0}, {a.Z1 - a.Z0})),"); }
+//foreach (var a in res.PackedContainers) { Console.WriteLine($"({a.Container.Id})),"); }
 
 
 //var chrom = new List<List<int>>();
