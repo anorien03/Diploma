@@ -1,32 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ReactiveUI;
 
 namespace ContainerPackingApp.ViewModels
 {
-    public class ContainerViewModel : ReactiveObject // Изменено с ViewModelBase на ReactiveObject
+    public class ContainerViewModel : ReactiveObject
     {
         private int _id;
-        private string _lengthInput = "10";
-        private string _widthInput = "10";
-        private string _heightInput = "10";
+        private string _lengthInput = "10.0";
+        private string _widthInput = "10.0";
+        private string _heightInput = "10.0";
         private string _weightInput = "10";
-
 
         private string _lengthError = "";
         private string _widthError = "";
         private string _heightError = "";
         private string _weightError = "";
 
-        public bool IsCorrect = true;
-
+        public bool IsCorrect =>
+    string.IsNullOrEmpty(LengthError) &&
+    string.IsNullOrEmpty(WidthError) &&
+    string.IsNullOrEmpty(HeightError) &&
+    string.IsNullOrEmpty(WeightError);
 
         public ContainerViewModel(int id)
         {
             _id = id;
         }
-
 
         public int Id
         {
@@ -39,9 +41,9 @@ namespace ContainerPackingApp.ViewModels
             get => _lengthInput;
             set
             {
-                this.RaiseAndSetIfChanged(ref _lengthInput, value);
-                ValidateLength(value);
-                UpdateCorrect();
+                ValidateDecimalInput(value, out string formattedValue, out string error);
+                this.RaiseAndSetIfChanged(ref _lengthInput, formattedValue);
+                LengthError = error;
             }
         }
 
@@ -50,9 +52,9 @@ namespace ContainerPackingApp.ViewModels
             get => _widthInput;
             set
             {
-                this.RaiseAndSetIfChanged(ref _widthInput, value);
-                ValidateWidth(value);
-                UpdateCorrect();
+                ValidateDecimalInput(value, out string formattedValue, out string error);
+                this.RaiseAndSetIfChanged(ref _widthInput, formattedValue);
+                WidthError = error;
             }
         }
 
@@ -61,9 +63,9 @@ namespace ContainerPackingApp.ViewModels
             get => _heightInput;
             set
             {
-                this.RaiseAndSetIfChanged(ref _heightInput, value);
-                ValidateHeight(value);
-                UpdateCorrect();
+                ValidateDecimalInput(value, out string formattedValue, out string error);
+                this.RaiseAndSetIfChanged(ref _heightInput, formattedValue);
+                HeightError = error;
             }
         }
 
@@ -74,10 +76,8 @@ namespace ContainerPackingApp.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _weightInput, value);
                 ValidateWeight(value);
-                UpdateCorrect();
             }
         }
-
 
         public string LengthError
         {
@@ -85,13 +85,11 @@ namespace ContainerPackingApp.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _lengthError, value);
         }
 
-
         public string WidthError
         {
             get => _widthError;
             private set => this.RaiseAndSetIfChanged(ref _widthError, value);
         }
-
 
         public string HeightError
         {
@@ -99,62 +97,60 @@ namespace ContainerPackingApp.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _heightError, value);
         }
 
-
         public string WeightError
         {
             get => _weightError;
             private set => this.RaiseAndSetIfChanged(ref _weightError, value);
         }
 
-
-        private void ValidateLength(string value)
+        private void ValidateDecimalInput(string input, out string formattedValue, out string error)
         {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                LengthError = "Обязательно для заполнения";
-            }
-            else if (!int.TryParse(value, out int num) || num <= 0)
-            {
-                LengthError = "Введите положительное число";
-            }
-            else
-            {
-                LengthError = "";
-            }
-        }
+            formattedValue = input;
+            error = "";
 
+            // Пустая строка допустима (ошибка будет обработана в валидаторе)
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                error = "Обязательно для заполнения";
+            }
 
-        private void ValidateWidth(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                WidthError = "Обязательно для заполнения";
-            }
-            else if (!int.TryParse(value, out int num) || num <= 0)
-            {
-                WidthError = "Введите положительное число";
-            }
-            else
-            {
-                WidthError = "";
-            }
-        }
+            // Заменяем запятую на точку для унификации
+            input = input.Replace(',', '.');
+            int num = 0;
 
+            // Проверяем формат числа
+            var parts = input.Split('.');
+            if (parts.Length == 2 && parts[1].Length >= 1)
+            {
+                if (!int.TryParse(parts[0], out num) || num <= 0)
+                    error = "Введите положительное число (формат: 0.0)";
 
-        private void ValidateHeight(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                HeightError = "Обязательно для заполнения";
+                if (!int.TryParse(parts[1], out num) || num < 0)
+                    error = "Введите положительное число (формат: 0.0)";
+
+                // Если больше одной цифры после точки - обрезаем
+                formattedValue = $"{parts[0]}.{parts[1].Substring(0, 1)}";
             }
-            else if (!int.TryParse(value, out int num) || num <= 0)
+                
+            else if (!input.Contains("."))
             {
-                HeightError = "Введите положительное число";
+                if (!int.TryParse(input, out num) || num <= 0)
+                    error = "Введите положительное число (формат: 0.0)";
+
+                // Добавляем .0 если нет дробной части
+                formattedValue = $"{input}.0";
             }
-            else
+            else if (parts.Length == 2 && parts[1].Length == 0)
             {
-                HeightError = "";
+                if (!int.TryParse(parts[0], out num) || num <= 0)
+                    error = "Введите положительное число (формат: 0.0)";
+
+                // Добавляем .0 если нет дробной части
+                formattedValue = $"{input}0";
             }
+            else { error = "Введите положительное число (формат: 0.0)"; }
+
+            
         }
 
 
@@ -166,7 +162,7 @@ namespace ContainerPackingApp.ViewModels
             }
             else if (!int.TryParse(value, out int num) || num <= 0)
             {
-                WeightError = "Введите положительное число";
+                WeightError = "Введите положительное целое число";
             }
             else
             {
@@ -174,23 +170,17 @@ namespace ContainerPackingApp.ViewModels
             }
         }
 
-
         public int GetId() => _id;
-        public int? GetLength() => TryParseInt(LengthInput);
-        public int? GetWidth() => TryParseInt(WidthInput);
-        public int? GetHeight() => TryParseInt(HeightInput);
+        public double? GetLength() => TryParseDouble(LengthInput);
+        public double? GetWidth() => TryParseDouble(WidthInput);
+        public double? GetHeight() => TryParseDouble(HeightInput);
         public int? GetWeight() => TryParseInt(WeightInput);
+
+        private double? TryParseDouble(string input) =>
+            double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out double result) ? result : (double?)null;
 
         private int? TryParseInt(string input) =>
             int.TryParse(input, out int result) ? result : (int?)null;
 
-
-        public void UpdateCorrect()
-        {
-            IsCorrect = string.IsNullOrEmpty(LengthError) &&
-                   string.IsNullOrEmpty(WidthError) &&
-                   string.IsNullOrEmpty(HeightError) &&
-                   string.IsNullOrEmpty(WeightError);
-        }
     }
 }

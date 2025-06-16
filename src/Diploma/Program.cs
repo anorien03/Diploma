@@ -525,23 +525,23 @@ for (int i = 0; i < 200; i++)
     sum1.Add(0);
 }
 
-var sum2 = new List<int>() { };
-for (int i = 0; i < 200; i++)
-{
-    sum2.Add(0);
-}
+//var sum2 = new List<int>() { };
+//for (int i = 0; i < 200; i++)
+//{
+//    sum2.Add(0);
+//}
 
-var sum3 = new List<int>() { };
-for (int i = 0; i < 200; i++)
-{
-    sum3.Add(0);
-}
+//var sum3 = new List<int>() { };
+//for (int i = 0; i < 200; i++)
+//{
+//    sum3.Add(0);
+//}
 
-var sum4 = new List<int>() { };
-for (int i = 0; i < 200; i++)
-{
-    sum4.Add(0);
-}
+//var sum4 = new List<int>() { };
+//for (int i = 0; i < 200; i++)
+//{
+//    sum4.Add(0);
+//}
 
 
 
@@ -549,7 +549,7 @@ var packer = new PackerEMS();
 //var res = packer.PackContainers(sh, cont, new List<int>() { 4, 8, 3, 5, 6, 7, 2, 1, 9 });
 
 
-var genetic1 = new GeneticAlgorithm(packer, 100, 200, 20, 3, 0);
+var genetic1 = new GeneticAlgorithm(packer, 100, 200, 20, 2, 4);
 for (int i = 0; i < 20; i++)
 {
     var res = genetic1.Run(sh, cont, out fitnessList);
@@ -560,7 +560,7 @@ for (int i = 0; i < 20; i++)
 
 
 
-//var genetic2 = new GeneticAlgorithm(packer, 100, 200, 20, 4, 10);
+//var genetic2 = new GeneticAlgorithm(packer, 100, 200, 20, 2, 6);
 
 //for (int i = 0; i < 20; i++)
 //{
@@ -573,7 +573,7 @@ for (int i = 0; i < 20; i++)
 
 
 
-//var genetic3 = new GeneticAlgorithm(packer, 100, 200, 20, 4, 20);
+//var genetic3 = new GeneticAlgorithm(packer, 100, 200, 20, 2, 8);
 
 //for (int i = 0; i < 20; i++)
 //{
@@ -585,7 +585,7 @@ for (int i = 0; i < 20; i++)
 
 
 
-//var genetic4 = new GeneticAlgorithm(packer, 100, 200, 20, 4, 30);
+//var genetic4 = new GeneticAlgorithm(packer, 100, 200, 20, 4, 6);
 
 //for (int i = 0; i < 20; i++)
 //{

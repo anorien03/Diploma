@@ -21,6 +21,7 @@ using Avalonia.Controls;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using Avalonia.Threading;
 
 namespace ContainerPackingApp.ViewModels
 {
@@ -31,10 +32,10 @@ namespace ContainerPackingApp.ViewModels
         private string _mutationRateInput = "30";
         private string _tournamentSizeInput = "2";
         private string _elitismInput = "5";
-        private string _shipHoldLengthInput = "100";
-        private string _shipHoldWidthInput = "100";
-        private string _shipHoldHeightInput = "100";
-        private string _shipHoldMaxWeightInput = "100";
+        private string _shipHoldLengthInput = "100.0";
+        private string _shipHoldWidthInput = "100.0";
+        private string _shipHoldHeightInput = "100.0";
+        private string _shipHoldMaxWeightInput = "10000";
 
         private string _resultText = "";
         private string _errorText = "";
@@ -83,10 +84,15 @@ namespace ContainerPackingApp.ViewModels
         // В методе RunAlgorithm после получения fitnessList:
         private void UpdateChart(List<int> fitnessList, ShipHold shipHold, int el)
         {
-            var size = shipHold.Length * shipHold.Width * shipHold.Height;
-            FitnessData = fitnessList.Select(f => (size - f) * 100 / size).ToList();
-            if (el != 0)
-                FitnessData.Sort();
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                FitnessData = fitnessList;
+                if (el != 0)
+                {
+                    FitnessData.Sort();
+                    FitnessData.Reverse();
+                }
+            });
         }
 
 
@@ -211,8 +217,9 @@ namespace ContainerPackingApp.ViewModels
             get => _shipHoldLengthInput;
             set
             {
-                this.RaiseAndSetIfChanged(ref _shipHoldLengthInput, value);
-                ValidateShipHoldLength(value);
+                ValidateDecimalInput(value, out string formattedValue, out string error);
+                this.RaiseAndSetIfChanged(ref _shipHoldLengthInput, formattedValue);
+                ShipHoldLengthError = error;
             }
         }
 
@@ -229,8 +236,9 @@ namespace ContainerPackingApp.ViewModels
             get => _shipHoldWidthInput;
             set
             {
-                this.RaiseAndSetIfChanged(ref _shipHoldWidthInput, value);
-                ValidateShipHoldWidth(value);
+                ValidateDecimalInput(value, out string formattedValue, out string error);
+                this.RaiseAndSetIfChanged(ref _shipHoldWidthInput, formattedValue);
+                ShipHoldWidthError = error;
             }
         }
 
@@ -247,8 +255,9 @@ namespace ContainerPackingApp.ViewModels
             get => _shipHoldHeightInput;
             set
             {
-                this.RaiseAndSetIfChanged(ref _shipHoldHeightInput, value);
-                ValidateShipHoldHeight(value);
+                ValidateDecimalInput(value, out string formattedValue, out string error);
+                this.RaiseAndSetIfChanged(ref _shipHoldHeightInput, formattedValue);
+                ShipHoldHeightError = error;
             }
         }
 
@@ -319,34 +328,54 @@ namespace ContainerPackingApp.ViewModels
                 ElitismError = "";
         }
 
-        private void ValidateShipHoldLength(string value)
+        private void ValidateDecimalInput(string input, out string formattedValue, out string error)
         {
-            if (string.IsNullOrWhiteSpace(value))
-                ShipHoldLengthError = "Поле обязательно для заполнения";
-            else if (!int.TryParse(value, out int num) || num <= 0)
-                ShipHoldLengthError = "Введите положительное число";
-            else
-                ShipHoldLengthError = "";
-        }
+            formattedValue = input;
+            error = "";
 
-        private void ValidateShipHoldWidth(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                ShipHoldWidthError = "Поле обязательно для заполнения";
-            else if (!int.TryParse(value, out int num) || num <= 0)
-                ShipHoldWidthError = "Введите положительное число";
-            else
-                ShipHoldWidthError = "";
-        }
+            // Пустая строка допустима (ошибка будет обработана в валидаторе)
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                error = "Обязательно для заполнения";
+            }
 
-        private void ValidateShipHoldHeight(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                ShipHoldHeightError = "Поле обязательно для заполнения";
-            else if (!int.TryParse(value, out int num) || num <= 0)
-                ShipHoldHeightError = "Введите положительное число";
-            else
-                ShipHoldHeightError = "";
+            // Заменяем запятую на точку для унификации
+            input = input.Replace(',', '.');
+            int num = 0;
+
+            // Проверяем формат числа
+            var parts = input.Split('.');
+            if (parts.Length == 2 && parts[1].Length >= 1)
+            {
+                if (!int.TryParse(parts[0], out num) || num <= 0)
+                    error = "Введите положительное число (формат: 0.0)";
+
+                if (!int.TryParse(parts[1], out num) || num < 0)
+                    error = "Введите положительное число (формат: 0.0)";
+
+                // Если больше одной цифры после точки - обрезаем
+                formattedValue = $"{parts[0]}.{parts[1].Substring(0, 1)}";
+            }
+
+            else if (!input.Contains("."))
+            {
+                if (!int.TryParse(input, out num) || num <= 0)
+                    error = "Введите положительное число (формат: 0.0)";
+
+                // Добавляем .0 если нет дробной части
+                formattedValue = $"{input}.0";
+            }
+            else if (parts.Length == 2 && parts[1].Length == 0)
+            {
+                if (!int.TryParse(parts[0], out num) || num <= 0)
+                    error = "Введите положительное число (формат: 0.0)";
+
+                // Добавляем .0 если нет дробной части
+                formattedValue = $"{input}0";
+            }
+            else { error = "Введите положительное число (формат: 0.0)"; }
+
+
         }
 
         private void ValidateShipHoldMaxWeight(string value)
@@ -359,15 +388,19 @@ namespace ContainerPackingApp.ViewModels
                 ShipHoldMaxWeightError = "";
         }
 
+        private double? TryParseDouble(string input) =>
+            double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out double result) ? result : (double?)null;
+
         // Методы для получения числовых значений
         public int? GetGenerationsCount() => TryParseInt(GenerationsCountInput);
         public int? GetMutationRate() => TryParseInt(MutationRateInput);
         public int? GetTournamentSize() => TryParseInt(TournamentSizeInput);
         public int? GetElitism() => TryParseInt(ElitismInput);
-        public int? GetShipHoldLength() => TryParseInt(ShipHoldLengthInput);
-        public int? GetShipHoldWidth() => TryParseInt(ShipHoldWidthInput);
-        public int? GetShipHoldHeight() => TryParseInt(ShipHoldHeightInput);
         public int? GetShipHoldMaxWeight() => TryParseInt(ShipHoldMaxWeightInput);
+
+        public double? GetShipHoldLength() => TryParseDouble(ShipHoldLengthInput);
+        public double? GetShipHoldWidth() => TryParseDouble(ShipHoldWidthInput);
+        public double? GetShipHoldHeight() => TryParseDouble(ShipHoldHeightInput);
 
         private int? TryParseInt(string input) =>
             int.TryParse(input, out int result) ? result : (int?)null;
@@ -511,6 +544,84 @@ namespace ContainerPackingApp.ViewModels
         {
             if (!CanRunAlgorithm()) return;
 
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                _isRunning = true;
+                ErrorText = "is running...";
+            });
+
+
+
+            try
+            {
+                await Dispatcher.UIThread.InvokeAsync(async () =>
+                {
+                    var shipHold = new ShipHold(
+                    (int)(GetShipHoldLength() * 10 ?? 0),
+                    (int)(GetShipHoldWidth() * 10 ?? 0),
+                    (int)(GetShipHoldHeight() * 10 ?? 0),
+                    GetShipHoldMaxWeight() ?? 0);
+
+                var containers = Containers.Select(c =>
+                    new Container(c.GetId(), (int) (c.GetLength() * 10 ?? 0), (int)(c.GetWidth() * 10 ?? 0), (int)(c.GetHeight() * 10 ?? 0), c.GetWeight() ?? 0)).ToList();
+
+                var el = GetElitism() ?? 5;
+                var ga = new GeneticAlgorithm(
+                    new PackerEMS(),
+                    GetPopulationSize() ?? 200,
+                    GetGenerationsCount() ?? 100,
+                    GetMutationRate() ?? 30,
+                    GetTournamentSize() ?? 2,
+                    GetElitism() ?? 5);
+
+                var fitnessList = new List<int>();
+                var result = await Task.Run(() => ga.Run(shipHold, containers, out fitnessList));
+                    UpdateChart(fitnessList, shipHold, el);
+                    HasResults = true;
+                PackedContainers.Clear();
+                foreach (var container in result.PackedContainers)
+                {
+                    PackedContainers.Add(new ContainerInfo
+                    {
+                        Id = container.Container.Id,
+                        StartCoordinates = $"({(double) container.X0 / 10.0}, {(double) container.Y0 / 10.0}, {(double) container.Z0 / 10.0})",
+                        EndCoordinates = $"    ({(double) container.X1 / 10.0}, {(double) container.Y1 / 10.0}, {(double) container.Z1 / 10.0})"
+                    });
+                }
+
+                ResultText = "С учетом ориентации:\n" +
+                            $"Целевая функция: {(double)(shipHold.Volume - result.TotalVolume) / 1000}\n" +
+                            $"Количество упакованных контейнеров: {result.PackedContainers.Count}\n" +
+                             $"Суммарный объем упакованных контейнеров: {(double) result.TotalVolume / 1000} м³\n" +
+                             $"Суммарный вес упакованных контейнеров: {result.TotalWeight} кг\n" +
+                             $"Оставшийся объем трюма: {(double)(shipHold.Volume - result.TotalVolume) / 1000} м³\n" +
+                             $"Заполненность трюма: {result.TotalVolume / (double)shipHold.Volume * 100:0.##}%\n" +
+                             $"Количество неупакованных контейнеров (из-за ограниченного объема): {result.UnpackedSpaceContainersId.Count}\n" +
+                             $"Количество неупакованных контейнеров (из-за ограниченной грузоподъемности) : {result.UnpackedWeightContainersId.Count}\n";
+                });
+            }
+            catch (Exception ex)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() => ResultText = $"Error: {ex.Message}");
+            }
+            finally
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    _isRunning = false;
+                    ErrorText = "";
+                });
+            }
+
+
+        }
+
+
+
+        public async void RunAlgorithmNoOrint()
+        {
+            if (!CanRunAlgorithm()) return;
+
             _isRunning = true;
             ErrorText = "is running...";
 
@@ -519,17 +630,17 @@ namespace ContainerPackingApp.ViewModels
             try
             {
                 var shipHold = new ShipHold(
-                    GetShipHoldLength() ?? 0,
-                    GetShipHoldWidth() ?? 0,
-                    GetShipHoldHeight() ?? 0,
+                    (int)(GetShipHoldLength() * 10 ?? 0),
+                    (int)(GetShipHoldWidth() * 10 ?? 0),
+                    (int)(GetShipHoldHeight() * 10 ?? 0),
                     GetShipHoldMaxWeight() ?? 0);
 
                 var containers = Containers.Select(c =>
-                    new Container(c.GetId(), c.GetLength() ?? 0, c.GetWidth() ?? 0, c.GetHeight() ?? 0, c.GetWeight() ?? 0)).ToList();
+                    new Container(c.GetId(), (int)(c.GetLength() * 10 ?? 0), (int)(c.GetWidth() * 10 ?? 0), (int)(c.GetHeight() * 10 ?? 0), c.GetWeight() ?? 0)).ToList();
 
                 var el = GetElitism() ?? 5;
                 var ga = new GeneticAlgorithm(
-                    new PackerEMS(),
+                    new PackerEMSNoOrint(),
                     GetPopulationSize() ?? 200,
                     GetGenerationsCount() ?? 100,
                     GetMutationRate() ?? 30,
@@ -546,14 +657,16 @@ namespace ContainerPackingApp.ViewModels
                     PackedContainers.Add(new ContainerInfo
                     {
                         Id = container.Container.Id,
-                        StartCoordinates = $"({container.X0}, {container.Y0}, {container.Z0})",
-                        EndCoordinates = $"    ({container.X1}, {container.Y1}, {container.Z1})"
+                        StartCoordinates = $"({(double)container.X0 / 10.0}, {(double)container.Y0 / 10.0}, {(double)container.Z0 / 10.0})",
+                        EndCoordinates = $"    ({(double)container.X1 / 10.0}, {(double)container.Y1 / 10.0}, {(double)container.Z1 / 10.0})"
                     });
                 }
 
-                ResultText = $"Количество упакованных контейнеров: {result.PackedContainers.Count}\n" +
-                             $"Суммарный объем упакованных контейнеров: {result.TotalVolume} дм³\n" +
-                             $"Суммарный вес упакованных контейнеров: {result.TotalWeight} т\n" +
+                ResultText = "Без учета ориентации:\n" +
+                             $"Целевая функция: {shipHold.Volume - result.TotalVolume}\n" +
+                             $"Количество упакованных контейнеров: {result.PackedContainers.Count}\n" +
+                             $"Суммарный объем упакованных контейнеров: {(double)result.TotalVolume / 1000} м³\n" +
+                             $"Суммарный вес упакованных контейнеров: {result.TotalWeight} кг\n" +
                              $"Заполненность трюма: {result.TotalVolume / (double)shipHold.Volume * 100:0.##}%\n" +
                              $"Количество неупакованных контейнеров (из-за ограниченного объема): {result.UnpackedSpaceContainersId.Count}\n" +
                              $"Количество неупакованных контейнеров (из-за ограниченной грузоподъемности) : {result.UnpackedWeightContainersId.Count}\n";

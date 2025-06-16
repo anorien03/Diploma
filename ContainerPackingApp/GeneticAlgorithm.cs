@@ -49,8 +49,9 @@ namespace ContainerPackingApp
 
             for (int g = 0; g < GenerationsCount; g++)
             {
-                population.Sort(new IndividualComparer());
+                SortByFitness(population);
                 fitnessList.Add(population[0].Fitness);
+                Console.WriteLine(population[0].Fitness);
 
                 List<Individual> elites;
                 List<Individual> selected;
@@ -100,7 +101,6 @@ namespace ContainerPackingApp
             }
 
             SortByFitness(population);
-            Console.WriteLine($"end: fitness = {population[0].Fitness}");
 
             return PackContainers(population[0]);
 
@@ -153,7 +153,7 @@ namespace ContainerPackingApp
         {
             var population = new List<Individual>();
             var containersId = _containers.Select(c => c.Id).ToList();
-            
+
             while (population.Count < size)
             {
                 var random = new Random();
@@ -168,20 +168,9 @@ namespace ContainerPackingApp
                     if (population[j].Chromosome.SequenceEqual(chromosome)) { exists = true; }
                 }
 
-                if (exists)
-                {
-                    continue;
-                }
-
-                var fitness = _shipHold.Volume - _packer.PackContainers(_shipHold, _containers, chromosome).TotalVolume;
-                var f = fitness * 100 / _shipHold.Volume;
-                
-                if (!exists & PopulationSize > 10 & f < a) { exists = true; }
-
                 if (!exists)
                 {
                     var ind = new Individual(chromosome);
-                    ind.Fitness = fitness;
                     population.Add(ind);
                 }
                     

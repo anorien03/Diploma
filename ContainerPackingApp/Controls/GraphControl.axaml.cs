@@ -14,11 +14,14 @@ namespace ContainerPackingApp.Controls
     public class GraphControl : Control
     {
         private List<int> _dataPoints = new();
-        private Pen _linePen = new Pen(Brushes.Gray, 2);
+        private Pen _linePen = new Pen(Brushes.Blue, 2);
         private Pen _axisPen = new Pen(Brushes.Black, 2);
         private Typeface _axisFont = new Typeface("Arial");
         private const int Padding = 40;
-        private const int PointRadius = 2;
+        private const int PointRadius = 0;
+        private const int YAxisLabelCount = 20; // Фиксированное количество делений на оси Y
+        private const int LeftPadding = 80; // Увеличенный отступ для оси Y
+        private const int BottomPadding = 40;
 
         public static readonly DirectProperty<GraphControl, List<int>> DataPointsProperty =
             AvaloniaProperty.RegisterDirect<GraphControl, List<int>>(
@@ -54,29 +57,40 @@ namespace ContainerPackingApp.Controls
             var height = bounds.Height;
 
             // Draw axes
-            context.DrawLine(_axisPen, new Point(Padding, height - Padding), new Point(width - Padding, height - Padding)); // X-axis
-            context.DrawLine(_axisPen, new Point(Padding, Padding), new Point(Padding, height - Padding)); // Y-axis
+            context.DrawLine(_axisPen, new Point(LeftPadding, height - BottomPadding),
+                new Point(width - Padding, height - BottomPadding)); // X-axis
+            context.DrawLine(_axisPen, new Point(LeftPadding, Padding),
+                new Point(LeftPadding, height - BottomPadding)); // Y-axis
 
-            // Фиксированный максимум и округленный минимум
-            const double maxY = 100;
+            // Рассчитываем minY и maxY с округлением
+            double maxY = _dataPoints.Max();
             double minY = _dataPoints.Min();
-            minY = Math.Floor(minY / 10) * 10; // Округляем до меньшего кратного 10
+
+            // Округляем до ближайших целых чисел с небольшим отступом
+            maxY = Math.Ceiling(maxY * 1.02); // Добавляем 10% сверху
+            minY = Math.Floor(minY * 0.98); // Добавляем 10% снизу
+
+            // Если все значения одинаковые, добавляем диапазон
+            if (maxY <= minY)
+            {
+                maxY = minY + 2;
+                minY = minY - 2;
+            }
+
             double rangeY = maxY - minY;
 
-            double graphWidth = width - 2 * Padding;
-            double graphHeight = height - 2 * Padding;
+            double graphWidth = width - LeftPadding - Padding;
+            double graphHeight = height - 2 * BottomPadding;
 
             // Draw axis labels
-            DrawAxisLabels(context, width, height, maxY, minY);
+            DrawAxisLabels(context, width, height, maxY, minY, rangeY);
 
             // Draw data points and lines
             Point? previousPoint = null;
             for (int i = 0; i < _dataPoints.Count; i++)
             {
-                double x = Padding + (i * graphWidth) / (_dataPoints.Count - 1);
-
-                // Масштабируем к координатам графика
-                double y = height - Padding - ((_dataPoints[i] - minY) * graphHeight / rangeY);
+                double x = LeftPadding + (i * graphWidth) / (_dataPoints.Count - 1);
+                double y = height - BottomPadding - ((_dataPoints[i] - minY) * graphHeight / rangeY);
 
                 var currentPoint = new Point(x, y);
 
@@ -93,48 +107,50 @@ namespace ContainerPackingApp.Controls
             }
         }
 
-
-        private const int LeftPadding = 40; // Увеличили отступ слева для значений оси Y
-        private const int BottomPadding = 40; // Отступ снизу
-
-        private void DrawAxisLabels(DrawingContext context, double width, double height, double maxY, double minY)
+        private void DrawAxisLabels(DrawingContext context, double width, double height,
+                          double maxY, double minY, double rangeY)
         {
-            // Y-axis labels (с шагом 10)
-            int steps = (int)((maxY - minY) / 2);
-            for (int i = 0; i <= steps; i++)
+            // Y-axis labels - 20 отрезков
+            for (int i = 0; i <= YAxisLabelCount; i++)
             {
-                double value = minY + (maxY - minY) * i / steps;
-                double y = height - BottomPadding - (height - 2 * BottomPadding) * i / steps;
+                double value = minY + (rangeY * i / YAxisLabelCount);
+                double y = height - BottomPadding - ((height - 2 * BottomPadding) * i / YAxisLabelCount);
+
+                // Форматируем значение: делим на 1000 и оставляем одну цифру после точки
+                string formattedValue = (value / 1000).ToString("0.0", CultureInfo.InvariantCulture);
 
                 var text = new FormattedText(
-                    value.ToString("0"),
+                    formattedValue,
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     _axisFont,
                     12,
                     Brushes.Black);
 
-                // Рисуем значения с новым отступом
-                context.DrawText(text, new Point(LeftPadding - text.Width - 5, y - text.Height / 2));
+                // Рисуем текст значения
+                context.DrawText(text, new Point(LeftPadding - text.Width - 10, y - text.Height / 2));
+
+                // Рисуем маленький отрезок (тик) на оси Y
+                double tickLength = 5;
+                context.DrawLine(
+                    _axisPen,
+                    new Point(LeftPadding - tickLength, y),
+                    new Point(LeftPadding, y));
             }
 
-            // X-axis labels (остается без изменений)
+            // X-axis labels
             if (_dataPoints.Count > 1)
             {
-                int labelCount = Math.Min(21, _dataPoints.Count);
-                int step = (int)Math.Ceiling(_dataPoints.Count / 10.0);
-                step = ((step + 9) / 10) * 10;
+                int labelCount = Math.Min(10, _dataPoints.Count);
+                int step = _dataPoints.Count / labelCount;
+                if (step < 1) step = 1;
 
-                for (int i = 0; i < labelCount; i++)
+                for (int i = 0; i < _dataPoints.Count; i += step)
                 {
-                    int index = i * step;
-                    if (index >= _dataPoints.Count)
-                        index = _dataPoints.Count - 1;
-
-                    double x = LeftPadding + (width - LeftPadding - BottomPadding) * index / (_dataPoints.Count - 1);
+                    double x = LeftPadding + (width - LeftPadding - Padding) * i / (_dataPoints.Count - 1);
 
                     var text = new FormattedText(
-                        index.ToString(),
+                        i.ToString(),
                         CultureInfo.CurrentCulture,
                         FlowDirection.LeftToRight,
                         _axisFont,
@@ -155,11 +171,11 @@ namespace ContainerPackingApp.Controls
                 Brushes.Black);
             context.DrawText(xLabel, new Point(width / 2 - xLabel.Width / 2, height - BottomPadding + 20));
 
-            // Подпись оси Y - слева от увеличенного отступа
-            string yLabelText = "Заполненность трюма (%)";
+            // Подпись оси Y (вертикальный текст)
+            string yLabelText = "Целевая функция";
             double letterSpacing = 9;
-            double startY = height / 2 + (yLabelText.Length * letterSpacing) / 2; // Изменили знак
-            double xPos = 5;
+            double startY = height / 2 + (yLabelText.Length * letterSpacing) / 2;
+            double xPos = 10; // Увеличенный отступ для подписи оси Y
 
             for (int i = 0; i < yLabelText.Length; i++)
             {
@@ -171,23 +187,15 @@ namespace ContainerPackingApp.Controls
                     12,
                     Brushes.Black);
 
-                // 1. Сначала поворачиваем, потом смещаем
                 var transform = Matrix.CreateRotation(-Math.PI / 2) *
                                Matrix.CreateTranslation(xPos, startY - i * letterSpacing);
 
-                // 2. Альтернативный вариант позиционирования
                 using (context.PushTransform(transform))
                 {
                     context.DrawText(letter, new Point(0, 0));
-
-                    // Для отладки - рамка вокруг буквы
-                    //context.DrawRectangle(new Pen(Brushes.Red, 1), 
-                    //    new Rect(0, 0, letter.Width, letter.Height));
                 }
             }
         }
-
-
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
@@ -199,16 +207,13 @@ namespace ContainerPackingApp.Controls
             }
         }
 
-
         public static readonly StyledProperty<IBrush> BackgroundProperty =
-        AvaloniaProperty.Register<GraphControl, IBrush>(nameof(Background), inherits: true);
+            AvaloniaProperty.Register<GraphControl, IBrush>(nameof(Background), inherits: true);
 
         public IBrush Background
         {
             get => GetValue(BackgroundProperty);
             set => SetValue(BackgroundProperty, value);
         }
-
-
     }
 }
